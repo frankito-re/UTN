@@ -1,0 +1,2 @@
+Nombre del producto: poduct2, cantidad vendida: 29, precio es: 29
+Nombre del producto: product2, cantidad vendida: 100, precio es: 100
