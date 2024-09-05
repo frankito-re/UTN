@@ -26,3 +26,4 @@ class Persona:
         print(f'Es mayor de edad: {self.age >= 18}')
         
 persona1 = Persona('Franco', 'Reyes', 18, 51238129)
+persona1 = Persona('Brunito', 'Fiochi', 18, 51238129)
