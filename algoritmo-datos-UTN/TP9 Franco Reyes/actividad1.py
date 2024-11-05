@@ -1,14 +1,20 @@
-# Ordene los siguientes numeros 76, 21, 34, 68, 31, 27, 53 utilizando el algoritmo de
-# ordenacion por Insercion (Insertion Sort)
+def insertion_sort(arr):
+    
+    for i in range(1, len(arr)):
+        key = arr[i]
 
-def bubble_sort(lista):
-    n = len(lista)
-    for i in range(n):
-        for j in range(0, n-i-1):
-            if lista[j] > lista[j+1]:
-                lista[j], lista[j+1] = lista[j+1], lista[j]
+        j = i - 1
+        while j >= 0 and key < arr[j]:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key  
+    return arr
 
-# Ejemplo
-lista = [3, 2, 1]
-bubble_sort(lista)
-print("Lista ordenada:", lista)
+# Lista de numeros
+numeros = [76, 21, 34, 68, 31, 27, 53]
+
+# Ordeno la lista
+numeros_ordenados = insertion_sort(numeros)
+
+# Aca voy a mostrar la lista ordenada 
+print("Numeros ordenados:", numeros_ordenados)
