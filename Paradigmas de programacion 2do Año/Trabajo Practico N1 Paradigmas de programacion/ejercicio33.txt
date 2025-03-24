@@ -1,0 +1,11 @@
+¿Que diferencia hay entre listas y arreglos? Explique.
+
+	Arreglos:
+        Tienen tamaño fijo (generalmente definido al momento de crearlos).
+        Suelen almacenar elementos del mismo tipo de dato (homogéneos).
+        Son estructuras más rígidas en cuanto a tamaño.
+
+    Listas:
+        Tienen tamaño dinámico (puedes agregar o eliminar elementos libremente).
+        Pueden almacenar elementos de distintos tipos (heterogéneos).
+        Son más flexibles y adaptables.

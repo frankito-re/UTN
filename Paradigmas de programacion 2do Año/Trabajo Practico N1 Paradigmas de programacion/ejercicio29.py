@@ -9,8 +9,8 @@
 # f ) Cuantas palabras de longitud impar contiene.
 import string
 
-file = open("/Users/d3ksur/Proyectos Mios/UTN/Paradigmas de programacion 2do Año/Trabajo Practico N1 Paradigmas de programacion/cuento.txt", "r")
-cuento = file.read()
+with open("<path>/cuento.txt", "r") as file:
+    cuento = file.read()
 
 splited_words = cuento.split()
 
