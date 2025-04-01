@@ -1,16 +1,4 @@
 # Nombre alumno: Franco Genaro Reyes
-
-# Computo. Se debera crear una clase llamada Computo, con su constructor por defecto
-# sin parametros, que permitira realizar una serie de calculos sobre un numero entero n.
-# Debera crear los siguientes metodos:
-# a) Un metodo llamado f actorial que permita calcular el factorial de n. Debera testear
-# el metodo instanciando la clase como en todos los ejercicios.
-# b) Un metodo llamado suma que calcule la suma de los primeros n numeros enteros.
-# c) Un metodo llamado es primo que permita testear si el numero es primo o no.
-# d) Un metodo tabla multiplicacion que creara y mostrara la tabla de multiplicar de n.
-# e) Un metodo lista divisores que obtenga todos los divisores de n y los retorne en un
-# arreglo o lista.
-
 class Computo:
     def __init__(self):
         print('El objeto se ha inicializado')
