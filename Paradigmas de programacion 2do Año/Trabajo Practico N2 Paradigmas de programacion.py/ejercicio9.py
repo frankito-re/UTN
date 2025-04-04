@@ -15,29 +15,34 @@
 import random
 
 class Heroe:
+    class Inventario:
+        def __init__(self):
+            self.elementos_de_heroe = []
+            
     def __init__(self, nombre):
         self.cantidad_vida = 100
         self.nivel_magia = 1
-        self.golpe = 1
-        self.golpe_critico = 1/4
+        self.daño = 10
+        self.prob_critico = 0.25
+        self.multiplicador_critico = 2
         self.hambre = 100
         self.nombre = nombre
-        
+        self.inventario = Heroe.Inventario()
+
     def atacar(self):
         if random.random() < self.prob_critico:
             print("¡Golpe crítico!")
             return int(self.daño * self.multiplicador_critico)
         else:
             return self.daño
-    def tomar_elemento(self):
+
+    def tomar_elemento_despensa(self, elemento):
+        self.inventario.elementos_de_heroe.append(elemento)
+        
+    def usar_elemento(self, elemento):
         pass
-    def usar_elemento(self):
+    def dejar_elemento(self, elemento):
         pass
-    def dejar_elemento(self):
-        pass
-    def dejar_elemento_en_inventario(self):
-        pass
-    
-    class Inventario:
+    def dejar_elemento_en_inventario(self, elemento):
         pass
 print(random.random())
