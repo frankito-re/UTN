@@ -1,3 +1,4 @@
+# Nombre alumno: Franco Genaro Reyes
 import random
 
 class Heroe:

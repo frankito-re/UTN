@@ -1,3 +1,4 @@
+# Nombre alumno: Franco Genaro Reyes
 Responda las siguientes preguntas estas refieren a terminologia basica de POO, marcando
 las que considere correctas o explicandolas:
 1. ¿Puedo tener mas de una clase en un archivo?
