@@ -1,0 +1,8 @@
+Responda las siguientes preguntas estas refieren a terminologia basica de POO, marcando
+las que considere correctas o explicandolas:
+1. ¿Puedo tener mas de una clase en un archivo?
+    Si, si puedes tener mas de una clase dentro de una archivo
+2. Que es una Instancia?
+    Una instancia es simplemente un objeto creado a partir de una clase.
+3. ¿Clase e Instancia, son lo mismo?
+    No, no son lo mismo ya que la clase es el molde y la instancia es un objeto real basado en ese plano

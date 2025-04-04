@@ -1,17 +1,3 @@
-# Heroe Crear una clase llamada Heroe, que representara un guerrero de un juego arcade
-# en 2D. Debera usar internamente otra clase, que tambien debera crear llamada Inventario
-# que modelara la mochila o inventario del guerrero. En el programa principal habra una
-# Despensa, donde habra una lista de elementos disponibles, puede considerar asignarles
-# ademas un precio a cada elemento y agregar dinero al Heroe. El Heroe podra tomar elementos de la Despensa, quitandolos de la lista disponible. Tambien podrıa agregar interes
-# a dicha lista considerando las cantidades disponibles por elemento y/o su precio. Elementos posibles podrıan ser Pocion, Flechas, Guantes, Escudo, etc
-    # a) El Heroe podra realizar las siguientes acciones: tomar un elemento de la despensa
-    # (o comprarlo segun la version que ud decida implementar) Podra Usar un elemento
-    # que ya tiene, o dejar de usarlo y ponerlo en su mochila. Tendra niveles de sangre o
-    # vida, y niveles de magia.
-    # b) El Heroe tendra atributos como sangre o vida, nivel de magia, daño, daño crıtico por
-    # ejemplo para determinar cuantas posibilidades de hacer mucho daño tiene en cada
-    # ataque. Hambre, que lo harıa descansar por ejemplo. Nombre, Guilda. Puede agregar
-    # o modificar algunos de los atributos mencionados en pos de diseñar su Heroe.
 import random
 
 class Heroe:
@@ -28,6 +14,8 @@ class Heroe:
         self.hambre = 100
         self.nombre = nombre
         self.inventario = Heroe.Inventario()
+        self.objetos_en_uso = []
+        print(f'El heroe {self.nombre} ha sido creado')
 
     def atacar(self):
         if random.random() < self.prob_critico:
@@ -36,13 +24,36 @@ class Heroe:
         else:
             return self.daño
 
-    def tomar_elemento_despensa(self, elemento):
-        self.inventario.elementos_de_heroe.append(elemento)
-        
+    def tomar_elemento_despensa(self, elemento, despensa):
+        if elemento in despensa:
+            despensa.remove(elemento)
+            self.inventario.elementos_de_heroe.append(elemento)
+            print(f"{self.nombre} ha tomado {elemento} de la despensa.")
+        else:
+            print(f"El item {elemento} no está disponible en la despensa.")
+        print(f'Elementos restantes en la despensa: {despensa}')
+
     def usar_elemento(self, elemento):
-        pass
+        if elemento in self.inventario.elementos_de_heroe:
+            self.inventario.elementos_de_heroe.remove(elemento)
+            self.objetos_en_uso.append(elemento)
+            print(f'{self.nombre} está usando el item {elemento}')
+        else:
+            print(f'El item {elemento} no se encuentra en el inventario')
+        
     def dejar_elemento(self, elemento):
-        pass
-    def dejar_elemento_en_inventario(self, elemento):
-        pass
-print(random.random())
+        if elemento in self.objetos_en_uso:
+            self.objetos_en_uso.remove(elemento)
+            self.inventario.elementos_de_heroe.append(elemento)
+            print(f'{self.nombre} dejó de usar el item {elemento}')
+        else:
+            print(f'{self.nombre} no está usando el item {elemento}')
+
+despensa = ["Pocion", "Flechas", "Escudo"]
+heroe1 = Heroe('Franco')
+heroe1.tomar_elemento_despensa('Pocion', despensa)
+heroe1.usar_elemento('Pocion')
+heroe1.dejar_elemento_en_inventario()
+heroe1.tomar_elemento_despensa('Escudo', despensa)
+heroe1.usar_elemento('Escudo')
+heroe1.dejar_elemento_en_inventario()
