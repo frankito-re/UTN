@@ -25,9 +25,9 @@ class Facturador:
         print("---------------------------------------------")
         print(f"Producto: {self.detalle}")
         print(f"Cantidad: {self.cantidad}")
-        print(f"Precio unitario: ${self.preciounitario:.2f}")
+        print(f"Precio unitario: ${self.preciounitario}")
         print("---------------------------------------------")
-        print(f"Total a pagar: ${self.preciototal:.2f}")
+        print(f"Total a pagar: ${self.preciototal}")
         print("---------------------------------------------")
 
 facturador1 = Facturador()
