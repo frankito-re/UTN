@@ -1,33 +1,33 @@
 # Nombre alumno: Franco Genaro Reyes
 class Facturador:
     def __init__(self):
-        self.fechafacturacion = ""
-        self.nombrecliente = ""
+        self.fecha_facturacion = ""
+        self.nombre_cliente = ""
         self.detalle = ""
-        self.preciounitario = 0.0
+        self.precio_unitario = 0.0
         self.cantidad = 0
-        self.preciototal = 0.0
+        self.precio_total = 0.0
 
     def facturar_mercaderia(self):
-        self.fechafacturacion = input("Ingresá la fecha de facturación: ")
-        self.nombrecliente = input("Ingresá el nombre del cliente: ")
+        self.fecha_facturacion = input("Ingresá la fecha de facturación: ")
+        self.nombre_cliente = input("Ingresá el nombre del cliente: ")
         self.detalle = input("Ingresá el detalle del producto: ")
         self.cantidad = int(input("Ingresá la cantidad de productos: "))
-        self.preciounitario = float(input("Ingresá el precio unitario del producto: "))
+        self.precio_unitario = float(input("Ingresá el precio unitario del producto: "))
 
-        self.preciototal = self.cantidad * self.preciounitario
+        self.precio_total = self.cantidad * self.precio_unitario
 
     def mostrar_factura_por_pantalla(self):
         print("\nFACTURA")
         print("---------------------------------------------")
-        print(f"Fecha: {self.fechafacturacion}")
-        print(f"Cliente: {self.nombrecliente}")
+        print(f"Fecha: {self.fecha_facturacion}")
+        print(f"Cliente: {self.nombre_cliente}")
         print("---------------------------------------------")
         print(f"Producto: {self.detalle}")
         print(f"Cantidad: {self.cantidad}")
-        print(f"Precio unitario: ${self.preciounitario}")
+        print(f"Precio unitario: ${self.precio_unitario}")
         print("---------------------------------------------")
-        print(f"Total a pagar: ${self.preciototal}")
+        print(f"Total a pagar: ${self.precio_total}")
         print("---------------------------------------------")
 
 facturador1 = Facturador()
