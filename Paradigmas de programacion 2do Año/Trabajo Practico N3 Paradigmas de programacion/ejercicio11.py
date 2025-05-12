@@ -1,3 +1,4 @@
+# Nombre alumno: Franco Genaro Reyes
 class Carrito:
     def __init__(self):
         self.items = []
