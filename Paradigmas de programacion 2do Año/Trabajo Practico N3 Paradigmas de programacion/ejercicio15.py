@@ -41,3 +41,13 @@ class Binario:
 
     def mostrar(self):
         return self.valor
+
+b1 = Binario('1010')
+b2 = Binario('0111')
+
+suma = b1.sumar(b2)
+resta = b1.restar(b2)
+
+print('Suma:', suma.mostrar())
+print('Resta:', resta.mostrar())
+print('Decimal de b1:', b1.a_decimal())
