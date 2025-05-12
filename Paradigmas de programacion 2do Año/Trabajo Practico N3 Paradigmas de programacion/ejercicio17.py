@@ -1,48 +1,105 @@
-# Shelter de Mascotas.
-# Se desea desarrollar un sistema para un Shelter de mascotas (Shelter: refugio temporal para mascotas que se espera sean adoptadas). Los animales que este shelter cuida
-# temporalmente y trata de ubicar en adopcion son: perros, gatos, conejos, canarios,
-# tortugas y peces.
-# Implementar una clase Animal que tendra los siguientes atributos genericos para
-# cualquiera de los animales que interesaran en este programa: raza, nombre, color,
-# edad, estado de salud, genero.
-# El estado de salud, debera ser implementado como un atributo que solo puede tomar
-# uno de los valores posibles de una lista de opciones, cuyos valores seran diferentes
-# segun el tipo de animal, pues peces no tienen los mismos problemas que los perros
-# por ejemplo.
 class Animal:
-    def __init__(self, raza, nombre, color, edad, estado_de_salud, genero):
-        self.raza = raza
+    def __init__(self, especie, nombre, raza, color, edad, genero, estado_salud):
+        self.especie = especie
         self.nombre = nombre
+        self.raza = raza
         self.color = color
         self.edad = edad
         self.genero = genero
-        self.estado_de_salud = None
-        self.estados_salud_posibles = []
-        self.validar_estado_de_salud(estado_de_salud)
+        self.estado_salud = estado_salud
+        self.adoptado = False
 
-    def validar_estado_de_salud(self, estado):
-        if estado in self.estados_salud_posibles:
-            self.estado_de_salud = estado
-        else:
-            return 'Ese tipo de salud no esta disponible'
+    def mostrar_info(self):
+        estado = 'Adoptado' if self.adoptado else 'Disponible'
+        print(f'{self.nombre} ({self.especie}) - {self.raza}, {self.color}, {self.edad} años, {self.genero}, Salud: {self.estado_salud}, Estado: {estado}')
 
-# Para animales con patas, el estado de salud podria contar con los siguientes valores
-# posibles: sano, enfermo cronico, cojo, debil.
 class Perro(Animal):
-    def __init__(self, raza, nombre, color, edad, estado_de_salud, genero, agresivo):
-        super().__init__(raza, nombre, color, edad, estado_de_salud, genero)
-        self.estados_salud_posibles = ['sano', 'enfermo cronico', 'cojo', 'debil']
-        self.agresivo = agresivo
-        
-perro1 = Perro()
-perro1=Perro("Beagle", "Piku", "Tricolor", 8, "sano", "Hembra")
-    
-# Analice bien los atributos que podrian hacer falta. Disene para los peces y las aves,
-# sus atributos. El metodo adoptar() no es implementado en la clase Padre Animal,
-# sino en cada hijo. Determine si le hara falta un atributo adoptado (si/no) en el
-# Animal.
-# Luego, cuando ya haya disenado e implementado las clases, el siguiente paso sera,
-# crear un programa principal, para la administracion de los animales en el Shelter.
-# Suponga que al Shelter han llegado 2 conejos nuevos. Y que ya habia 3 perros, un
-# gato, 5 peces. Simule ahora como seria el proceso de adopcion para 1 conejo y el
-# gato, ademas de un perro, siempre y cuando no sea agresivo y pueda estar con ninos.
+    def __init__(self, nombre, raza, color, edad, genero, estado_salud, es_agresivo, bueno_con_niños):
+        super().__init__('Perro', nombre, raza, color, edad, genero, estado_salud)
+        self.es_agresivo = es_agresivo
+        self.bueno_con_niños = bueno_con_niños
+
+    def adoptar(self):
+        if not self.es_agresivo and self.bueno_con_niños:
+            self.adoptado = True
+            return True
+        return False
+
+class Gato(Animal):
+    def __init__(self, nombre, raza, color, edad, genero, estado_salud):
+        super().__init__('Gato', nombre, raza, color, edad, genero, estado_salud)
+
+    def adoptar(self):
+        self.adoptado = True
+        return True
+
+class Conejo(Animal):
+    def __init__(self, nombre, raza, color, edad, genero, estado_salud):
+        super().__init__('Conejo', nombre, raza, color, edad, genero, estado_salud)
+
+    def adoptar(self):
+        self.adoptado = True
+        return True
+
+class Pez(Animal):
+    def __init__(self, nombre, raza, color, edad, genero, estado_salud, tipo_agua):
+        super().__init__('Pez', nombre, raza, color, edad, genero, estado_salud)
+        self.tipo_agua = tipo_agua  # dulce o salada
+
+    def adoptar(self):
+        self.adoptado = True
+        return True    
+
+class Canario(Animal):
+    def __init__(self, nombre, raza, color, edad, genero, estado_salud, plumaje):
+        super().__init__('Canario', nombre, raza, color, edad, genero, estado_salud)
+        self.plumaje = plumaje  # fuerte o débil
+
+    def adoptar(self):
+        self.adoptado = True
+        return True
+
+# Crear animales
+perros = [
+    Perro('Roco', 'Labrador', 'marrón', 4, 'macho', 'sano', False, True),
+    Perro('Toby', 'Pitbull', 'gris', 5, 'macho', 'cojo', True, False),
+    Perro('Luna', 'Golden', 'dorado', 3, 'hembra', 'sano', False, True)
+]
+
+gato = Gato('Michi', 'Siamés', 'blanco', 2, 'macho', 'sano')
+
+peces = [
+    Pez('Nemo', 'Clown', 'naranja', 1, 'macho', 'sano', 'salada'),
+    Pez('Burbujas', 'Dorado', 'amarillo', 1, 'hembra', 'aleta herida', 'dulce'),
+    Pez('Ray', 'Raya', 'gris', 2, 'macho', 'sano', 'salada'),
+    Pez('Dory', 'Cirujano', 'azul', 1, 'hembra', 'sano', 'salada'),
+    Pez('Flash', 'Betta', 'rojo', 1, 'macho', 'sano', 'dulce')
+]
+
+conejos = [
+    Conejo('Pelusa', 'Mini Lop', 'blanco', 1, 'hembra', 'sano'),
+    Conejo('Bruno', 'Holandés', 'negro', 2, 'macho', 'sano')
+]
+
+# Mostrar animales antes de la adopción
+print('Animales antes de la adopción:\n')
+for animal in perros + [gato] + conejos + peces:
+    animal.mostrar_info()
+
+# Simular adopciones
+print('\nProceso de adopción:\n')
+conejos[0].adoptar()
+gato.adoptar()
+adoptado = False
+for perro in perros:
+    if perro.adoptar():
+        print(f'{perro.nombre} fue adoptado como perro apto para niños.')
+        adoptado = True
+        break
+if not adoptado:
+    print('No se encontró un perro apto para la adopción.')
+
+# Mostrar animales después de la adopción
+print('\nAnimales después de la adopción:\n')
+for animal in perros + [gato] + conejos + peces:
+    animal.mostrar_info()
