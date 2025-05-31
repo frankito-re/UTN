@@ -1,0 +1,2 @@
+Fecha y hora de llamada: 2025-05-30 17:19:32
+El nombre de la funcion llamada es: funcion_a_decorar

@@ -1,0 +1,43 @@
+# Nombre alumno: Franco Genaro Reyes
+
+@staticmethod
+- Cuando querés poner una función dentro de una clase porque está relacionada lógicamente con ella,
+pero no necesita acceder a sus datos internos.
+- Ejemplo:
+class Calculadora:
+    @staticmethod
+    def sumar(a, b):
+        return a + b
+
+print(Calculadora.sumar(3, 4))  # ➜ 7
+
+@property
+- El decorador @property en Python te permite convertir un método en un atributo de solo lectura. Es 
+una forma elegante de acceder a valores calculados dinámicamente,
+como si fueran atributos, sin tener que llamarlos con ().
+- Ejemplo:
+class Persona:
+    def __init__(self, nombre, nacimiento):
+        self.nombre = nombre
+        self.nacimiento = nacimiento
+
+    @property
+    def edad(self):
+        return 2025 - self.nacimiento
+
+@classmethod
+- El decorador @classmethod en Python te permite definir un método que trabaja con la clase en sí,
+no con una instancia particular. Es decir, en lugar de usar self,
+vas a usar cls como primer parámetro.
+- Ejemplo:
+class Persona:
+    cantidad = 0
+
+    def __init__(self, nombre):
+        self.nombre = nombre
+        Persona.cantidad += 1
+
+    @classmethod
+    def crear_desde_string(cls, cadena):
+        nombre = cadena.split("-")[0]
+        return cls(nombre)
