@@ -1,17 +1,3 @@
-// Para una partida de un juego de rol, Dungeons & Dragons, cada jugador empieza por
-// generar un personaje con el cual jugaran. Este personaje que debe generar,
-// tiene que tener 6 habilidades, a saber: fuerza, destreza, constitucion, inteligencia, sabiduria y carisma
-// (simplificando).
-// Estas seis habilidades tienen cada una, un puntaje determinado de modo aleatorio. Esto
-// se consigue tirando 4 dados de rol, de 6 caras. Y calculando la suma de los tres dados de
-// mayor numero (descartando el dado menor). Este proceso de tirar los 4 dados y calcular
-// dicha suma de los mayores, se repite para cada habilidad, hasta poder completar el personaje.
-// Ademas, tu personaje tendra una sangre o salud de 10 puntos iniciales sumado a un modificador que dependera de la constitucion de dicho personaje particular.
-// Ese modificador se determina sustrayendo 10 de su constitucion, dividiendo luego por 2,
-// y redondeando hacia abajo.
-// Teniendo en cuenta todos esos requisitos, crear un Generador de Personaje de Dungeons
-// y Dragons, aleatorio.
-
 // Nombre alumno: Franco Genaro Reyes
 import java.util.Arrays;
 import java.util.Random;

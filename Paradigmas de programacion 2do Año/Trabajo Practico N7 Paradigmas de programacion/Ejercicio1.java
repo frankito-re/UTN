@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Ejercicio1 {
 
+    @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);  // Paso 1
         System.out.print("Ingrese una palabra: ");
