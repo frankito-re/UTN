@@ -1,5 +1,3 @@
-// Permita ingresar una frase al usuario, y muestre las letras en posiciones alternadas, una
-// si, otra no de la misma.
 
 // Nombre alumno: Franco Genaro Reyes
 import java.util.Scanner;
@@ -11,5 +9,12 @@ public class Ejercicio7 {
         System.out.print("Ingrese una palabra: ");
         String phrase = input.nextLine();
         input.close();
+        for (int i = 0; i < phrase.length(); i++) {
+            if (i % 2 == 0) {
+                System.out.print(phrase.charAt(i));
+            } else {
+                System.out.print(" ");
+            }
+        }
     }
 }
