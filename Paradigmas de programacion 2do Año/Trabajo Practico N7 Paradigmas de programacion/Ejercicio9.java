@@ -1,8 +1,5 @@
-// Permita ingresar una palabra al usuario, y una letra. Reemplace las letras a que encuentre
-// en la frase ingresada, por el simbolo de numeral.
 
 // Nombre alumno: Franco Genaro Reyes
-
 import java.util.Scanner;
 
 public class Ejercicio9 {
