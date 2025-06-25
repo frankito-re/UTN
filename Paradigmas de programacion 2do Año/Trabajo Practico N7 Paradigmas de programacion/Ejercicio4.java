@@ -1,3 +1,4 @@
+
 // Nombre alumno: Franco Genaro Reyes
 import java.util.Scanner;
 
@@ -9,7 +10,7 @@ public class Ejercicio4 {
         int numero = input.nextInt();
         int original = numero;
         int suma = 0;
-        int digitos = String.valueOf(numero).length();  // Cantidad de dígitos
+        int digitos = String.valueOf(numero).length(); // Cantidad de dígitos
 
         while (numero > 0) {
             int digito = numero % 10;

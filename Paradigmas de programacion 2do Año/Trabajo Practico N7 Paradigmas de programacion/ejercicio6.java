@@ -2,7 +2,7 @@
 // Nombre alumno: Franco Genaro Reyes
 import java.util.Scanner;
 
-public class ejercicio6 {
+public class Ejercicio6 {
     @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
