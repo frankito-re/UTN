@@ -1,7 +1,3 @@
-// Pedir colores al usuario de los autos que ve pasar en su viaje de 3 horas en tren. Ir
-// cargando los colores hasta que el usuario ingrese una letra t de terminar. El programa
-// debera entonces determinar cual fue el color de auto mas comun de ver, durante su viaje
-// en tren.
 
 // Nombre alumno: Franco Genaro Reyes
 import java.util.ArrayList;
