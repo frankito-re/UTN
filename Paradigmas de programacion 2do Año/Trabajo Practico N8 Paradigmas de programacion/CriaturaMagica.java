@@ -1,9 +1,9 @@
 // Nombre alumno: Franco Genaro Reyes
 public class CriaturaMagica {
-    String nombre;
-    String tipo_elemento;
+    private final String nombre;
+    private final String tipo_elemento;
     // int nivel_poder;
-    boolean esta_domesticada;
+    private boolean esta_domesticada;
 
     public CriaturaMagica(String nombre, String tipoElemento, int nivelPoder) {
         this.nombre = nombre;

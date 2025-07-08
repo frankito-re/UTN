@@ -1,8 +1,8 @@
 // Nombre alumno: Franco Genaro Reyes
 public class ProductoVending {
-    String nombre;
+    private final String nombre;
     // int precio_creditos;
-    int cantidad_disponible;
+    private int cantidad_disponible;
 
     public ProductoVending(String nombre, int precio_creditos, int cantidad_disponible) {
         this.nombre = nombre;

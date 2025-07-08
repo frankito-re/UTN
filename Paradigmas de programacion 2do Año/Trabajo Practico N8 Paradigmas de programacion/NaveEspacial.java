@@ -1,9 +1,9 @@
 // Nombre alumno: Franco Genaro Reyes
 public class NaveEspacial {
-    String nombre;
+    private final String nombre;
     // int capacidad_pasajeros;
     // double velocidad_maxima;
-    double combustible_actual;
+    private double combustible_actual;
 
     public NaveEspacial(String nombre, double combustible_actual) {
         this.nombre = nombre;

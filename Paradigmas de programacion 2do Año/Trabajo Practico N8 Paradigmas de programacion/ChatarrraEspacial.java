@@ -1,8 +1,8 @@
 // Nombre alumno: Franco Genaro Reyes
 public class ChatarrraEspacial {
-    String tipo_chatarra;
-    double peso_kg;
-    int valor_monedas;
+    private final String tipo_chatarra;
+    private final double peso_kg;
+    private final int valor_monedas;
 
     public ChatarrraEspacial(String tipo_chatarra, double peso_kg, int valor_monedas) {
         this.tipo_chatarra = tipo_chatarra;

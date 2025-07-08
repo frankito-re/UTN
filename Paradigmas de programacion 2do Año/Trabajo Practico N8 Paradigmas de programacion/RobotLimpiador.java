@@ -1,9 +1,9 @@
 // Nombre alumno: Franco Genaro Reyes
 public class RobotLimpiador {
-    String nombre;
-    int nivelBateria;
-    String areaActual;
-    boolean estaLimpiando;
+    private final String nombre;
+    private int nivelBateria;
+    private String areaActual;
+    private boolean estaLimpiando;
 
     public RobotLimpiador(String nombre) {
         this.nombre = nombre;
