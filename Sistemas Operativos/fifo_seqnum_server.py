@@ -2,15 +2,19 @@
 # Carrera: Ingenieria en Sistemas de Información
 # Numero de Legajo: 10911
 
-# servidor_fifo_reabre.py
+# servidor_fifo_read_end.py
 import os
 import time
 
-FIFO_PATH = "/tmp/mi_fifo"
+FIFO_PATH = "/tmp/server_fifo.txt"
 
 # Paso 1: Crear el FIFO si no existe
 if not os.path.exists(FIFO_PATH):
-    os.mkfifo(FIFO_PATH)
+    try:
+        os.mkfifo(FIFO_PATH)
+        print("FIFO creada exitosamente.")
+    except Exception as e:
+        print("Error al crear FIFO:", e)
 
 print("Servidor iniciado. Esperando mensajes en", FIFO_PATH)
 
@@ -26,6 +30,7 @@ try:
 
             # Paso 4: Si llega aquí, se cerró el lado de escritura → EOF
             print("EOF detectado. Reabriendo FIFO...\n")
+            time.sleep(1)
 
 except KeyboardInterrupt:
     print("Servidor interrumpido. Cerrando FIFO...")
