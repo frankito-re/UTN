@@ -1,5 +1,7 @@
 import java.sql.Connection; // Importa la clase Connection para conectarse a la base de datos
 import java.sql.DriverManager; // Importa la clase DriverManager para obtener la conexión
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException; // Importa la clase PreparedStatement para ejecutar consultas SQL con parámetros
 
 public class PedirDatosDB {
@@ -12,23 +14,15 @@ public class PedirDatosDB {
         // Consulta SQL
         String sql = "SELECT * FROM Paciente"; // Consulta SQL que selecciona todos los registros de la tabla clientes
 
-        System.out.println("CLASSPATH:\n" + System.getProperty("java.class.path"));
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("Driver cargado OK");
-        } catch (ClassNotFoundException e) {
-            System.out.println("No encuentro el driver en el classpath");
-        }
-
         try {
             // Establecer conexión con la base de datos
             Connection conexion = DriverManager.getConnection(url, usuario, contraseña); // Crea una conexión con la BD
             System.out.println("Conexión exitosa a la base de datos."); // Mensaje si la conexión fue exitosa
 
             // Preparar y ejecutar la consulta
-            // PreparedStatement sentencia = conexion.prepareStatement(sql); // Prepara la
+            PreparedStatement sentencia = conexion.prepareStatement(sql); // Prepara la
             // consulta SQL
-            // ResultSet resultados = sentencia.executeQuery(); // Ejecuta la consulta y
+            ResultSet resultados = sentencia.executeQuery(); // Ejecuta la consulta y
             // guarda los resultados
 
             // Mostrar resultados
