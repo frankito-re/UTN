@@ -7,9 +7,7 @@ import settings
 from os.path import join
 
 pygame.init()
-
 pygame.display.set_caption("Touching Walls Game")
-
 window = pygame.display.set_mode((settings.WINDOW_WIDTH, settings.WINDOW_HEIGHT))
 
 from os import listdir
@@ -45,8 +43,7 @@ def load_sprite_sheets(dir1, dir2, width, height, direction=False):
 
 def get_background(name):
     image = pygame.image.load(join("assets", "Background", name))
-    _, _, width, height = image.get_rect()    
-    print(image.get_rect())
+    _, _, width, height = image.get_rect()
     tiles = []
 
     for i in range(settings.WINDOW_WIDTH // width + 1):
@@ -73,9 +70,12 @@ def handle_move(player):
     if keys[pygame.K_RIGHT]:
         player.move_right(settings.PLAYER_VEL)
 
+"""Clase Player"""
 class Player(pygame.sprite.Sprite):
     COLOR = (255, 0, 0)
-    SPRITES = load_sprite_sheets("character", "Character-No-Weapon", 100, 100, True)
+    GRAVITY = 1
+    SPRITES = load_sprite_sheets("character", "Character-No-Weapon", 96, 64, True)
+    ANIMATION_DELAY = 7
     def __init__(self, x, y, width, height):
         self.rect = pygame.Rect(x, y, width, height)
         self.x_vel = 0
@@ -106,9 +106,28 @@ class Player(pygame.sprite.Sprite):
         self.move(self.x_vel, self.y_vel)
         
         self.fall_count += 1
+        self.update_sprite()
+
+    def update_sprite(self):
+        sprite_sheet = "Character-NoWeapon-Idle"
+        if self.x_vel != 0:
+            sprite_sheet = "Character-NoWeapon-Run"
+
+        sprite_sheet_name = sprite_sheet + "_" + self.direction
+        sprites = self.SPRITES[sprite_sheet_name]
+        sprite_index = (self.animation_count // self.ANIMATION_DELAY) % len(sprites)
+        
+        #? Valores de animation_count y len(sprites)
+        print(self.animation_count)
+        print(len(sprites))
+        
+        self.sprite = sprites[sprite_index]
+        self.animation_count += 1
     
+    def update(self):
+        self.rect = self.sprite.get_rect(topleft=(self.rect.x, self.rect.y))
+
     def draw(self, win):
-        self.sprite = self.SPRITES['Character-NoWeapon-Idle_' + self.direction][0]
         win.blit(self.sprite, (self.rect.x, self.rect.y))
 
 def main(window):
