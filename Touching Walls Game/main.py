@@ -27,16 +27,16 @@ except pygame.error as e:
 # --- 2. Cargar Assets ---
 try:
     # --- Imágenes del Juego ---
-    img_fondo_original = pygame.image.load('assets/kenney_space-shooter-redux/Backgrounds/blue.png').convert()
-    img_jugador_original = pygame.image.load('assets/kenney_space-shooter-redux/PNG/playerShip1_blue.png').convert_alpha()
-    img_bala_original = pygame.image.load('assets/kenney_space-shooter-redux/PNG/Lasers/laserBlue01.png').convert_alpha()
-    img_alien_original = pygame.image.load('assets/kenney_space-shooter-redux/PNG/Enemies/enemyBlack1.png').convert_alpha()
-    img_bala_alien_original = pygame.image.load('assets/kenney_space-shooter-redux/PNG/Lasers/laserRed12.png').convert_alpha()
-    img_escudo_powerup_original = pygame.image.load('assets/kenney_space-shooter-redux/PNG/Power-ups/powerupBlue_shield.png').convert_alpha()
-    img_escudo_efecto_original = pygame.image.load('assets/kenney_space-shooter-redux/PNG/Effects/shield3.png').convert_alpha()
+    img_fondo_original = pygame.image.load('assets/Backgrounds/blue.png').convert()
+    img_jugador_original = pygame.image.load('assets/PNG/playerShip1_blue.png').convert_alpha()
+    img_bala_original = pygame.image.load('assets/PNG/Lasers/laserBlue01.png').convert_alpha()
+    img_alien_original = pygame.image.load('assets/PNG/Enemies/enemyBlack1.png').convert_alpha()
+    img_bala_alien_original = pygame.image.load('assets/PNG/Lasers/laserRed12.png').convert_alpha()
+    img_escudo_powerup_original = pygame.image.load('assets/PNG/Power-ups/powerupBlue_shield.png').convert_alpha()
+    img_escudo_efecto_original = pygame.image.load('assets/PNG/Effects/shield3.png').convert_alpha()
 
     # --- Assets del HUD ---
-    ui_path = 'assets/kenney_space-shooter-redux/PNG/UI/' 
+    ui_path = 'assets/PNG/UI/' 
     img_vida_icon = pygame.image.load(f'{ui_path}playerLife1_blue.png').convert_alpha()
     numeral_images = {}
     for i in range(10):
@@ -52,9 +52,9 @@ except pygame.error as e:
 
 try:
     # --- Sonidos ---
-    sonido_explosion = pygame.mixer.Sound('assets/kenney_space-shooter-redux/Bonus/sfx_zap.ogg')
-    sonido_hit_jugador = pygame.mixer.Sound('assets/kenney_space-shooter-redux/Bonus/sfx_shieldDown.ogg')
-    sonido_powerup = pygame.mixer.Sound('assets/kenney_space-shooter-redux/Bonus/sfx_shieldUp.ogg')
+    sonido_explosion = pygame.mixer.Sound('assets/Bonus/sfx_zap.ogg')
+    sonido_hit_jugador = pygame.mixer.Sound('assets/Bonus/sfx_shieldDown.ogg')
+    sonido_powerup = pygame.mixer.Sound('assets/Bonus/sfx_shieldUp.ogg')
 except pygame.error as e:
     print(f"Error al cargar sonidos: {e}")
     sonido_explosion = None
