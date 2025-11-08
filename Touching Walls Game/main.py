@@ -370,15 +370,12 @@ class Juego:
         if self.game_over:
             return # No actualizamos nada si perdimos
 
-        # La magia de los Grupos: .update() llama al método .update()
-        # de CADA sprite dentro del grupo (Player, Balas, Powerups)
         self.all_sprites.update() 
         self.flota.update() # Actualiza el movimiento del enjambre
 
         # --- Revisar Colisiones ---
         
         # 1. Balas del Jugador vs Aliens
-        # groupcollide revisa dos grupos. True, True = elimina ambos al chocar
         aliens_impactados = pygame.sprite.groupcollide(
             self.player_bala_group, self.flota.aliens_group, True, True
         )
