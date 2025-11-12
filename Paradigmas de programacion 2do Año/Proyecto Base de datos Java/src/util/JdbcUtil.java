@@ -1,35 +1,41 @@
-package src.util;
+package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public final class JdbcUtil {
-    private static final String URL = "jdbc:mysql://localhost:3306/bd_centro_salud_Java_Project?useSSL=false&serverTimezone=UTC";
-    private static final String USER = "root"; // <-- usuario
-    private static final String PASS = ""; // <-- password
+public class JdbcUtil {
 
-    static {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Driver MySQL no encontrado", e);
-        }
-    }
+    private static final String URL = "jdbc:mysql://localhost:3306/bioturnos";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
+
+    private static Connection connection = null;
 
     private JdbcUtil() {
     }
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
+    public static Connection getConnection() {
+        if (connection == null) {
+            try {
+                connection = DriverManager.getConnection(URL, USER, PASSWORD);
+                System.out.println("Conexión exitosa a la base de datos.");
+            } catch (SQLException e) {
+                System.err.println("Error al conectar a la base de datos: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        return connection;
     }
 
-    // helpers
-    public static void closeQuietly(AutoCloseable c) {
-        if (c != null)
+    public static void closeConnection() {
+        if (connection != null) {
             try {
-                c.close();
-            } catch (Exception ignored) {
+                connection.close();
+                System.out.println("Conexión cerrada.");
+            } catch (SQLException e) {
+                System.err.println("Error al cerrar la conexión: " + e.getMessage());
             }
+        }
     }
 }
