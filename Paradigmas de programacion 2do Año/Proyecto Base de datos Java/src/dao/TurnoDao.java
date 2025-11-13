@@ -1,16 +1,15 @@
 package dao;
 
-import model.Turno;
-import util.JdbcUtil;
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.Turno;
+import util.JdbcUtil;
 
 /**
  * 18
@@ -18,7 +17,7 @@ import java.util.List;
  */
 public class TurnoDao {
 
-    private Connection conn;
+    private final Connection conn;
 
     public TurnoDao() {
         this.conn = JdbcUtil.getConnection();

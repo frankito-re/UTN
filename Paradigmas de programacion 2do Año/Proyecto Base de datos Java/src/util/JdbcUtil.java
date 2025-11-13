@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class JdbcUtil {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/bioturnos";
+    private static final String URL = "jdbc:mysql://localhost:3306/bd_centro_salud_Java_Project";
     private static final String USER = "root";
     private static final String PASSWORD = "";
 

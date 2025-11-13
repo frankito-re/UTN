@@ -1,8 +1,5 @@
 package dao;
 
-import model.Consultorio;
-import util.JdbcUtil;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,12 +8,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Consultorio;
+import util.JdbcUtil;
+
 /**
  * DAO (Clase) para Consultorio.
  */
 public class ConsultorioDao {
 
-    private Connection conn;
+    private final Connection conn;
 
     public ConsultorioDao() {
         this.conn = JdbcUtil.getConnection();

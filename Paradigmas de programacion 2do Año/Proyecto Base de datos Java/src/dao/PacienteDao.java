@@ -1,8 +1,5 @@
 package dao;
 
-import model.Paciente;
-import util.JdbcUtil;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,12 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * DAO (Clase) para Paciente. Contiene todo el SQL de Paciente.
- */
+import model.Paciente;
+import util.JdbcUtil;
+
 public class PacienteDao {
 
-    private Connection conn;
+    private final Connection conn;
 
     public PacienteDao() {
         this.conn = JdbcUtil.getConnection();

@@ -1,5 +1,10 @@
 package service;
 
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.util.List;
+
 import dao.MedicoDao;
 import dao.PacienteDao;
 import dao.TurnoDao;
@@ -7,20 +12,15 @@ import model.Medico;
 import model.Paciente;
 import model.Turno;
 
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.util.List;
-
 /**
  * Servicio para Turno (Gerente).
  * ESTA ES LA LÓGICA DE NEGOCIO MÁS IMPORTANTE.
  */
 public class TurnoService {
 
-    private TurnoDao turnoDao;
-    private PacienteDao pacienteDao;
-    private MedicoDao medicoDao;
+    private final TurnoDao turnoDao;
+    private final PacienteDao pacienteDao;
+    private final MedicoDao medicoDao;
 
     public TurnoService() {
         this.turnoDao = new TurnoDao();

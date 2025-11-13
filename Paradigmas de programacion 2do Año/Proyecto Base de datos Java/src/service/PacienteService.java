@@ -1,15 +1,15 @@
 package service;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import dao.PacienteDao;
 import model.Paciente;
 import util.Validators;
 
-import java.sql.SQLException;
-import java.util.List;
-
 public class PacienteService {
 
-    private PacienteDao pacienteDao;
+    private final PacienteDao pacienteDao;
 
     public PacienteService() {
         this.pacienteDao = new PacienteDao();

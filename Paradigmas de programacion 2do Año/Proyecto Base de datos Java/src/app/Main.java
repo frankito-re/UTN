@@ -1,15 +1,17 @@
 package app;
 
-import model.*;
-import service.MedicoService;
-import service.PacienteService;
-import service.TurnoService;
-import util.JdbcUtil;
-
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 import java.util.Scanner;
+
+import model.Medico;
+import model.Paciente;
+import model.Turno;
+import service.MedicoService;
+import service.PacienteService;
+import service.TurnoService;
+import util.JdbcUtil;
 
 /**
  * Aplicación de consola para gestionar el Centro de Salud.
@@ -18,59 +20,52 @@ import java.util.Scanner;
 public class Main {
 
     // Servicios (Los "Gerentes")
-    private static PacienteService pacienteService = new PacienteService();
-    private static MedicoService medicoService = new MedicoService();
-    private static TurnoService turnoService = new TurnoService();
+    private static final PacienteService pacienteService = new PacienteService();
+    private static final MedicoService medicoService = new MedicoService();
+    private static final TurnoService turnoService = new TurnoService();
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         // Inicializar la conexión
-        JdbcUtil.getConnection();
+        try (scanner) {
+            // Inicializar la conexión
+            JdbcUtil.getConnection();
 
-        System.out.println("--- BIENVENIDO AL SISTEMA DE GESTIÓN DE TURNOS ---");
+            System.out.println("--- BIENVENIDO AL SISTEMA DE GESTIÓN DE TURNOS ---");
 
-        // Asumir que Especialidad y Consultorio ya están cargados en la BD
-        // INSERT INTO Especialidad (nombre) VALUES ('Cardiología'), ('Dermatología');
-        // INSERT INTO Consultorio (ubicacion) VALUES ('Piso 1, Puerta A'), ('Piso 1,
-        // Puerta B');
+            // Asumir que Especialidad y Consultorio ya están cargados en la BD
+            // INSERT INTO Especialidad (nombre) VALUES ('Cardiología'), ('Dermatología');
+            // INSERT INTO Consultorio (ubicacion) VALUES ('Piso 1, Puerta A'), ('Piso 1,
+            // Puerta B');
 
-        int opcion = -1;
-        while (opcion != 0) {
-            mostrarMenuPrincipal();
-            try {
-                // Manejo de línea vacía
-                String input = scanner.nextLine();
-                if (input.trim().isEmpty()) {
-                    System.out.println("Por favor, ingrese una opción.");
-                    continue;
+            int opcion = -1;
+            while (opcion != 0) {
+                mostrarMenuPrincipal();
+                try {
+                    // Manejo de línea vacía
+                    String input = scanner.nextLine();
+                    if (input.trim().isEmpty()) {
+                        System.out.println("Por favor, ingrese una opción.");
+                        continue;
+                    }
+                    opcion = Integer.parseInt(input);
+
+                    switch (opcion) {
+                        case 1 -> gestionarPacientes();
+                        case 2 -> gestionarMedicos();
+                        case 3 -> gestionarTurnos();
+                        case 0 -> System.out.println("Saliendo del sistema...");
+                        default -> System.out.println("Opción no válida.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Error: Ingrese solo números.");
                 }
-                opcion = Integer.parseInt(input);
-
-                switch (opcion) {
-                    case 1:
-                        gestionarPacientes();
-                        break;
-                    case 2:
-                        gestionarMedicos();
-                        break;
-                    case 3:
-                        gestionarTurnos();
-                        break;
-                    case 0:
-                        System.out.println("Saliendo del sistema...");
-                        break;
-                    default:
-                        System.out.println("Opción no válida.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Error: Ingrese solo números.");
             }
-        }
 
-        // Cerrar conexión al salir
-        JdbcUtil.closeConnection();
-        scanner.close();
+            // Cerrar conexión al salir
+            JdbcUtil.closeConnection();
+        }
     }
 
     private static void mostrarMenuPrincipal() {
@@ -162,39 +157,37 @@ public class Main {
         int opcion = Integer.parseInt(scanner.nextLine());
 
         try {
-            if (opcion == 1) {
-                System.out.println("--- Asignar Turno ---");
-                System.out.print("DNI del Paciente: ");
-                int dni = Integer.parseInt(scanner.nextLine());
-
-                System.out.println("Médicos disponibles:");
-                medicoService.listarMedicos().forEach(System.out::println);
-                System.out.print("Matrícula del Médico: ");
-                int mat = Integer.parseInt(scanner.nextLine());
-
-                System.out.print("Fecha (Formato AAAA-MM-DD): ");
-                Date fecha = Date.valueOf(scanner.nextLine());
-
-                System.out.print("Hora (Formato HH:MM:SS): ");
-                Time hora = Time.valueOf(scanner.nextLine());
-
-                Turno t = new Turno(fecha, hora, dni, mat, 0); // 0 temporal
-
-                turnoService.asignarTurno(t);
-
-                System.out.println("¡Turno asignado con éxito!");
-
-            } else if (opcion == 2) {
-                List<Turno> turnos = turnoService.listarTurnos();
-                if (turnos.isEmpty())
-                    System.out.println("No hay turnos registrados.");
-                turnos.forEach(System.out::println);
-
-            } else if (opcion == 3) {
-                System.out.print("ID del turno a cancelar: ");
-                int idTurno = Integer.parseInt(scanner.nextLine());
-                turnoService.cancelarTurno(idTurno);
-                System.out.println("Turno cancelado.");
+            switch (opcion) {
+                case 1 -> {
+                    System.out.println("--- Asignar Turno ---");
+                    System.out.print("DNI del Paciente: ");
+                    int dni = Integer.parseInt(scanner.nextLine());
+                    System.out.println("Médicos disponibles:");
+                    medicoService.listarMedicos().forEach(System.out::println);
+                    System.out.print("Matrícula del Médico: ");
+                    int mat = Integer.parseInt(scanner.nextLine());
+                    System.out.print("Fecha (Formato AAAA-MM-DD): ");
+                    Date fecha = Date.valueOf(scanner.nextLine());
+                    System.out.print("Hora (Formato HH:MM:SS): ");
+                    Time hora = Time.valueOf(scanner.nextLine());
+                    Turno t = new Turno(fecha, hora, dni, mat, 0); // 0 temporal
+                    turnoService.asignarTurno(t);
+                    System.out.println("¡Turno asignado con éxito!");
+                }
+                case 2 -> {
+                    List<Turno> turnos = turnoService.listarTurnos();
+                    if (turnos.isEmpty())
+                        System.out.println("No hay turnos registrados.");
+                    turnos.forEach(System.out::println);
+                }
+                case 3 -> {
+                    System.out.print("ID del turno a cancelar: ");
+                    int idTurno = Integer.parseInt(scanner.nextLine());
+                    turnoService.cancelarTurno(idTurno);
+                    System.out.println("Turno cancelado.");
+                }
+                default -> {
+                }
             }
         } catch (Exception e) {
             System.err.println("Error al gestionar turno: " + e.getMessage());

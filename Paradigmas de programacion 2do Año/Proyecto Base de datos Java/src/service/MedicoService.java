@@ -1,5 +1,8 @@
 package service;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import dao.ConsultorioDao;
 import dao.EspecialidadDao;
 import dao.MedicoDao;
@@ -8,18 +11,15 @@ import model.Especialidad;
 import model.Medico;
 import util.Validators;
 
-import java.sql.SQLException;
-import java.util.List;
-
 /**
  * Servicio para Medico (Gerente).
  * Valida datos (incluyendo FKs) y llama al MedicoDao.
  */
 public class MedicoService {
 
-    private MedicoDao medicoDao;
-    private EspecialidadDao especialidadDao; // Necesario para validar FK
-    private ConsultorioDao consultorioDao; // Necesario para validar FK
+    private final MedicoDao medicoDao;
+    private final EspecialidadDao especialidadDao; // Necesario para validar FK
+    private final ConsultorioDao consultorioDao; // Necesario para validar FK
 
     public MedicoService() {
         this.medicoDao = new MedicoDao();
