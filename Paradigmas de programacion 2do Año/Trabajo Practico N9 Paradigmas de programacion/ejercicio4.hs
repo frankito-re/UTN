@@ -1,0 +1,3 @@
+-- ¿Qué entiende por estado de un programa? El "estado" se refiere al conjunto de todos los valores almacenados en las variables y la memoria del programa en un momento dado. En un lenguaje imperativo (como Python o Java), el programa avanza "mutando" (cambiando) este estado (ej. x = x + 1).
+
+-- ¿El Paradigma Funcional tiene estados? El paradigma funcional puro (como Haskell) evita el estado mutable. Las funciones solo dependen de sus argumentos de entrada para producir una salida, y no tienen "efectos secundarios" (como modificar una variable global). El "estado" se maneja pasándolo explícitamente como parámetro de una función a la siguiente.

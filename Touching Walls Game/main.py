@@ -374,7 +374,6 @@ class Juego:
         self.flota.update() # Actualiza el movimiento del enjambre
 
         # --- Revisar Colisiones ---
-        
         # 1. Balas del Jugador vs Aliens
         aliens_impactados = pygame.sprite.groupcollide(
             self.player_bala_group, self.flota.aliens_group, True, True

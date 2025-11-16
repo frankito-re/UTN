@@ -1,6 +1,8 @@
-sumarpares (x : xs) =
-  if x rem 2 == 0
-    then
-      x + sumarpares []
-    else
-      sumarpares []
+-- 5/3
+-- 14 `div` 4
+-- div 14 4
+-- 2==2
+-- not (2==3)
+-- True && False
+-- :type 'a'
+-- 'a' < 'b'

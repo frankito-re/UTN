@@ -1,0 +1,3 @@
+-- Explicación: En Haskell, las variables son inmutables. Cuando defines let n = 5 en GHCi, n queda ligado a 5. Si luego escribes let n = 6, no estás cambiando el n original, sino creando una nueva variable n (que "oculta" a la anterior en esa sesión).
+
+-- En un script .hs, no puedes "reasignar" un valor. El código n = 5 seguido de n = 6 en el mismo ámbito generaría un error de "definiciones múltiples". Esto se debe a que Haskell es un lenguaje funcional puro y evita el "estado" mutable.

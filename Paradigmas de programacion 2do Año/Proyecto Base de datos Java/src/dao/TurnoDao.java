@@ -11,10 +11,6 @@ import java.util.List;
 import model.Turno;
 import util.JdbcUtil;
 
-/**
- * 18
- * DAO (Clase) para Turno. Contiene todo el SQL de Turno.
- */
 public class TurnoDao {
 
     private final Connection conn;

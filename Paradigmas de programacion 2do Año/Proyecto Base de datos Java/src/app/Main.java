@@ -34,11 +34,6 @@ public class Main {
 
             System.out.println("--- BIENVENIDO AL SISTEMA DE GESTIÓN DE TURNOS ---");
 
-            // Asumir que Especialidad y Consultorio ya están cargados en la BD
-            // INSERT INTO Especialidad (nombre) VALUES ('Cardiología'), ('Dermatología');
-            // INSERT INTO Consultorio (ubicacion) VALUES ('Piso 1, Puerta A'), ('Piso 1,
-            // Puerta B');
-
             int opcion = -1;
             while (opcion != 0) {
                 mostrarMenuPrincipal();

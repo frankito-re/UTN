@@ -22,7 +22,6 @@ public class JdbcUtil {
                 System.out.println("Conexión exitosa a la base de datos.");
             } catch (SQLException e) {
                 System.err.println("Error al conectar a la base de datos: " + e.getMessage());
-                e.printStackTrace();
             }
         }
         return connection;
