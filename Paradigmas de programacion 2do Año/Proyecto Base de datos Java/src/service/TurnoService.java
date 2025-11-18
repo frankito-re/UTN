@@ -12,10 +12,7 @@ import model.Medico;
 import model.Paciente;
 import model.Turno;
 
-/**
- * Servicio para Turno (Gerente).
- * ESTA ES LA LÓGICA DE NEGOCIO MÁS IMPORTANTE.
- */
+// Servicio para Turno.
 public class TurnoService {
 
     private final TurnoDao turnoDao;
@@ -28,9 +25,6 @@ public class TurnoService {
         this.medicoDao = new MedicoDao();
     }
 
-    /**
-     * Lógica principal: Asignar un turno validando todo.
-     */
     public void asignarTurno(Turno turno) throws Exception {
 
         Paciente p = pacienteDao.buscarPorId(turno.getDniPaciente());
@@ -56,9 +50,6 @@ public class TurnoService {
         }
     }
 
-    /**
-     * Lógica clave: Verifica si un médico ya tiene un turno en una fecha/hora.
-     */
     private boolean verificarDisponibilidad(int matriculaMedico, Date fecha, Time hora) throws SQLException {
         List<Turno> turnosDelDia = turnoDao.buscarPorMedicoYFecha(matriculaMedico, fecha);
 

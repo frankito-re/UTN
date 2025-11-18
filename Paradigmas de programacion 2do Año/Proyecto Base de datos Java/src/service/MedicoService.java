@@ -11,10 +11,8 @@ import model.Especialidad;
 import model.Medico;
 import util.Validators;
 
-/**
- * Servicio para Medico (Gerente).
- * Valida datos (incluyendo FKs) y llama al MedicoDao.
- */
+// Servicio para Medico (Gerente).
+// Valida datos (incluyendo FKs) y llama al MedicoDao.
 public class MedicoService {
 
     private final MedicoDao medicoDao;
@@ -74,7 +72,6 @@ public class MedicoService {
     }
 
     public void actualizarMedico(Medico medico) throws Exception {
-        // ... (Validaciones similares)
         try {
             medicoDao.actualizar(medico);
         } catch (SQLException e) {
@@ -93,7 +90,6 @@ public class MedicoService {
         }
     }
 
-    // --- Métodos de ayuda para la GUI ---
     public List<Especialidad> listarEspecialidades() throws Exception {
         try {
             return especialidadDao.buscarTodos();

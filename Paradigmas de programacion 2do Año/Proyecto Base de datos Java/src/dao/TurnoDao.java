@@ -45,10 +45,6 @@ public class TurnoDao {
         return turnos;
     }
 
-    /**
-     * MÉTODO CLAVE para la lógica de negocio.
-     * Busca todos los turnos de un médico en una fecha específica.
-     */
     public List<Turno> buscarPorMedicoYFecha(int matriculaMedico, Date fecha) throws SQLException {
         String sql = "SELECT * FROM Turno WHERE matricula_medico = ? AND fecha = ?";
         List<Turno> turnos = new ArrayList<>();
