@@ -1,0 +1,2 @@
+-- Indica  la  cantidad  de  fabricantes  distintos  que  tienen  al  menos  un  producto  cargado  en  la  tabla  producto. (Utilice COUNT y DISTINCT)
+SELECT COUNT(DISTINCT codigo_fabricante) FROM producto
