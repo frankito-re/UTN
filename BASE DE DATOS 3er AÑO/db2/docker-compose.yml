@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16
+    container_name: bd3_tp11_postgres
+    environment:
+      POSTGRES_DB: empresa_db
+      POSTGRES_USER: alumno
+      POSTGRES_PASSWORD: alumno
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d:ro
+      - bd3_tp11_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alumno -d empresa_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  bd3_tp11_pgdata:
