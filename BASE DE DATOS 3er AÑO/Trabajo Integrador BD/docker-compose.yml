@@ -1,0 +1,29 @@
+# Bodegas del Atuel - Trabajo Práctico Integrador
+# PostgreSQL 16 (el TP pide 14+)
+#
+# Los .sql de db/migrations se ejecutan en orden alfabético (001_, 002_, ...)
+# SOLO la primera vez que se crea el volumen. Para re-ejecutarlos desde cero:
+#   docker compose down -v && docker compose up -d
+services:
+  db:
+    image: postgres:16
+    container_name: bodegas_atuel_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: America/Argentina/Mendoza
+    ports:
+      - "${POSTGRES_PORT:-5435}:5432"
+    volumes:
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+      - bodegas_atuel_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  bodegas_atuel_pgdata:
