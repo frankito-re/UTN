@@ -17,7 +17,12 @@ _pool: ConnectionPool | None = None
 
 
 def conninfo() -> str:
-    """La API se conecta SIEMPRE como bodegas_api (privilegios minimos, 007_roles.sql)."""
+    """La API se conecta SIEMPRE como bodegas_api (privilegios minimos, 007_roles.sql).
+    En plataformas (Render, Railway...) se usa DATABASE_URL, ej.:
+    postgresql://bodegas_api.<ref>:<clave>@<host-del-pooler>:5432/postgres?sslmode=require"""
+    url = os.environ.get("DATABASE_URL")
+    if url:
+        return make_conninfo(url, connect_timeout="10", application_name="bodegas-api")
     return make_conninfo(
         host=os.environ.get("DB_HOST", "localhost"),
         port=os.environ.get("DB_PORT", "5435"),

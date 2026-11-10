@@ -1,0 +1,8 @@
+# Contexto de Dockerfile.cloud: solo lo necesario (lista blanca)
+*
+!api/requirements.txt
+!api/app
+!front/index.html
+!front/css
+!front/js
+**/__pycache__

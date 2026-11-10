@@ -1,0 +1,20 @@
+# Imagen unica para plataformas de contenedores (Render, Railway, Fly, Koyeb...): API en /api y front en /.
+# Contexto de build: la RAIZ del proyecto.   docker build -f Dockerfile.cloud -t bodegas-nube .
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 FRONT_DIR=/srv/front DB_POOL_MAX=5
+WORKDIR /srv
+
+COPY api/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY api/app ./app
+COPY front/index.html /srv/front/index.html
+COPY front/css /srv/front/css
+COPY front/js /srv/front/js
+
+RUN useradd --system --no-create-home api
+USER api
+
+# La plataforma inyecta PORT; --proxy-headers para ver el esquema https del proxy de la plataforma.
+CMD ["sh", "-c", "exec uvicorn app.nube:principal --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips='*'"]

@@ -10,3 +10,5 @@ node_modules/
 certs/
 backups/
 .env.prod
+.env.supabase
+.env.supabase.render

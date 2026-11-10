@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Restaura un backup en una base NUEVA (nunca pisa la de produccion sin --forzar).
 #   ENTORNO=prod scripts/restore.sh backups/bodegas_atuel_YYYYmmdd_HHMMSS.dump[.enc] [base_destino] [--forzar]
+#   (tambien acepta backups remotos en SQL plano: archivo.sql.gz[.enc], generados por backup_remoto.sh)
 # - Verifica la suma SHA-256 y descifra si hace falta (BACKUP_CLAVE).
 # - Crea los roles si no existen (servidor nuevo) y les pone clave desde el .env (API_DB_PASSWORD / RO_DB_PASSWORD).
 # - Reaplica lo que pg_dump NO guarda: privilegio CONNECT y random_page_cost de la base.
@@ -50,7 +51,12 @@ psql_db -d postgres -c "CREATE DATABASE \"$DESTINO_BD\" OWNER \"$PGUSUARIO\"" \
   || { echo "La base '$DESTINO_BD' ya existe: use otro nombre o --forzar." >&2; exit 1; }
 
 echo "Restaurando en '$DESTINO_BD'..."
-docker exec -i "$CONTENEDOR_DB" pg_restore -U "$PGUSUARIO" -d "$DESTINO_BD" --no-owner --exit-on-error < "$FUENTE"
+if [[ "${ARCHIVO%.enc}" == *.sql.gz ]]; then      # backup remoto en SQL plano (backup_remoto.sh): independiente de la version de Postgres
+  # (un pg_dump 17 emite parametros que un servidor mas viejo no conoce, ej. transaction_timeout, y CREATE SCHEMA public, que ya existe: se descartan)
+  gunzip -c "$FUENTE" | sed -e '/^SET transaction_timeout/d' -e '/^CREATE SCHEMA public;/d' | docker exec -i "$CONTENEDOR_DB" psql -U "$PGUSUARIO" -d "$DESTINO_BD" -v ON_ERROR_STOP=1 -X -q
+else
+  docker exec -i "$CONTENEDOR_DB" pg_restore -U "$PGUSUARIO" -d "$DESTINO_BD" --no-owner --exit-on-error < "$FUENTE"
+fi
 
 psql_db -d postgres <<SQL
 REVOKE ALL ON DATABASE "$DESTINO_BD" FROM PUBLIC;

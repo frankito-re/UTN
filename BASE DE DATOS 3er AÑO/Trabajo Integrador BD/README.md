@@ -12,7 +12,7 @@ procedimientos y triggers), los índices y las consultas viven en SQL; la API y 
 | **Front** | HTML + JavaScript sin dependencias, servido por nginx |
 | **Contenedores** | Docker Compose (desarrollo y producción) |
 | **Integrantes** | *(completar: nombres y rol de cada etapa)* |
-| **URL pública** | *(pendiente de publicar: ver [docs/despliegue_nube.md](docs/despliegue_nube.md))* |
+| **URL pública** | *(pendiente: guía lista en [docs/despliegue_supabase.md](docs/despliegue_supabase.md) — base en Supabase, aplicación en Render)* |
 
 ## Arranque rápido
 

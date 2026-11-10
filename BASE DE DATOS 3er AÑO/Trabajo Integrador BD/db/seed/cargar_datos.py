@@ -576,15 +576,20 @@ def main():
                     help="fecha 'de hoy' de los datos (AAAA-MM-DD) o 'hoy'; fija por defecto para que sea reproducible")
     ap.add_argument("--limpiar", action="store_true", help="vacia las tablas antes de cargar (obligatorio si ya hay datos)")
     ap.add_argument("--host", default="localhost")
+    ap.add_argument("--url", default=None,
+                    help="cadena de conexion completa del PROPIETARIO (ej. Supabase, con sslmode=require); reemplaza host/.env")
     ap.add_argument("--reporte", default=str(RAIZ / "docs" / "reporte_carga.md"), help="ruta del reporte ('' = no escribir)")
     a = ap.parse_args()
 
     global FECHA_REF
     FECHA_REF = dt.date.today() if a.fecha_ref == "hoy" else dt.date.fromisoformat(a.fecha_ref)
-    env = leer_env()
     try:
-        con = psycopg.connect(host=a.host, port=int(env.get("POSTGRES_PORT", 5435)), user=env["POSTGRES_USER"],
-                              password=env["POSTGRES_PASSWORD"], dbname=env["POSTGRES_DB"])
+        if a.url:
+            con = psycopg.connect(a.url, connect_timeout=15)
+        else:
+            env = leer_env()
+            con = psycopg.connect(host=a.host, port=int(env.get("POSTGRES_PORT", 5435)), user=env["POSTGRES_USER"],
+                                  password=env["POSTGRES_PASSWORD"], dbname=env["POSTGRES_DB"])
     except KeyError as e:
         sys.exit(f"Falta {e} en .env")
     tiempos = []

@@ -110,7 +110,7 @@ archiving); los certificados de la base vencen a los 825 días y hay que rotarlo
 
 ## 6. URL pública
 
-*Pendiente de publicar en un servidor real (ver sección 3).* Al hacerlo, completar:
+*Pendiente de publicar.* Hay dos caminos: la VPS de la sección 3 o **Supabase + Render** ([despliegue_supabase.md](despliegue_supabase.md), listo y probado salvo las cuentas reales). Al hacerlo, completar:
 
 * URL: `https://…`
 * Fecha y proveedor: …

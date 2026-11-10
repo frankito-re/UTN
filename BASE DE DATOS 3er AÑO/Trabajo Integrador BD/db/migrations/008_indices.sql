@@ -92,6 +92,14 @@ CREATE INDEX idx_empleado_sala               ON empleado (id_sala);             
 -- Se aplica a toda conexión nueva a esta base. Medido en docs/informe_indices.md.
 DO $$
 BEGIN
-    EXECUTE format('ALTER DATABASE %I SET random_page_cost = 1.1', current_database());
+    BEGIN
+        EXECUTE format('ALTER DATABASE %I SET random_page_cost = 1.1', current_database());
+    EXCEPTION WHEN insufficient_privilege THEN
+        RAISE NOTICE 'Sin privilegios para ALTER DATABASE (servicio gestionado): el ajuste queda solo a nivel de rol.';
+    END;
 END;
 $$;
+
+-- Tambien por rol: vale aunque no se pueda cambiar la base (y cubre a las conexiones de la API y de reportes).
+ALTER ROLE bodegas_api SET random_page_cost = 1.1;
+ALTER ROLE bodegas_ro  SET random_page_cost = 1.1;

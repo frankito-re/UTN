@@ -47,11 +47,12 @@ BEGIN
                         WHERE i.indrelid = c.conrelid AND i.indkey[0] = c.conkey[1]);
     ASSERT v_faltan IS NULL, 'FK hacia vino sin indice de apoyo en: ' || COALESCE(v_faltan, '');
 
-    -- random_page_cost fijado a nivel base
-    ASSERT EXISTS (SELECT 1 FROM pg_db_role_setting s JOIN pg_database d ON d.oid = s.setdatabase
-                    WHERE d.datname = current_database() AND s.setrole = 0
-                      AND 'random_page_cost=1.1' = ANY (s.setconfig)),
-        'random_page_cost debe estar fijado en 1.1 para la base';
+    -- random_page_cost fijado a nivel base o, en servicios gestionados, a nivel de los roles de la aplicacion
+    ASSERT EXISTS (SELECT 1 FROM pg_db_role_setting s
+                    WHERE 'random_page_cost=1.1' = ANY (s.setconfig)
+                      AND (s.setdatabase = (SELECT oid FROM pg_database WHERE datname = current_database())
+                           OR s.setrole = (SELECT oid FROM pg_roles WHERE rolname = 'bodegas_api'))),
+        'random_page_cost debe estar fijado en 1.1 (base o rol bodegas_api)';
 
     RAISE NOTICE 'OK: todas las pruebas de 008_indices pasaron';
 END;

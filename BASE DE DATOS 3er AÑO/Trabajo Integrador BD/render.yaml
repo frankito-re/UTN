@@ -1,0 +1,15 @@
+# Blueprint de Render: un unico servicio web (API en /api + front en /). La base vive en Supabase.
+# Solo funciona si este archivo esta en la RAIZ del repositorio conectado (ver docs/despliegue_supabase.md).
+services:
+  - type: web
+    name: bodegas-del-atuel
+    runtime: docker
+    dockerfilePath: ./Dockerfile.cloud
+    dockerContext: .
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL      # pegar el valor de .env.supabase.render (no se versiona)
+        sync: false
+      - key: DB_POOL_MAX
+        value: "5"

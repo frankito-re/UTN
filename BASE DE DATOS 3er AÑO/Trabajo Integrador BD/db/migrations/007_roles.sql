@@ -41,15 +41,25 @@ ALTER ROLE bodegas_ro  SET default_transaction_read_only = on;
 -- -----------------------------------------------------------------------------
 -- Cerrar lo que PUBLIC recibe por defecto y abrir solo lo necesario
 -- -----------------------------------------------------------------------------
+-- Los privilegios sobre la base y el esquema public los puede cambiar solo su propietario. En un servicio
+-- gestionado (Supabase, RDS...) el usuario de las migraciones no lo es: ahi se omiten con un aviso y la
+-- seguridad se completa con deploy/supabase/endurecer.sql.
 DO $$
 BEGIN
-    EXECUTE format('REVOKE ALL ON DATABASE %I FROM PUBLIC', current_database());
-    EXECUTE format('GRANT CONNECT ON DATABASE %I TO bodegas_api, bodegas_ro', current_database());
+    BEGIN
+        EXECUTE format('REVOKE ALL ON DATABASE %I FROM PUBLIC', current_database());
+        EXECUTE format('GRANT CONNECT ON DATABASE %I TO bodegas_api, bodegas_ro', current_database());
+    EXCEPTION WHEN insufficient_privilege THEN
+        RAISE NOTICE 'Sin privilegios para modificar permisos de la base: se omite (servicio gestionado).';
+    END;
+    BEGIN
+        REVOKE ALL ON SCHEMA public FROM PUBLIC;
+        GRANT USAGE ON SCHEMA public TO bodegas_api, bodegas_ro;
+    EXCEPTION WHEN insufficient_privilege THEN
+        RAISE NOTICE 'Sin privilegios para modificar permisos del esquema public: se omite (servicio gestionado).';
+    END;
 END;
 $$;
-
-REVOKE ALL ON SCHEMA public FROM PUBLIC;
-GRANT USAGE ON SCHEMA public TO bodegas_api, bodegas_ro;
 
 -- Por defecto cualquiera puede ejecutar cualquier funcion: se cierra, tambien
 -- para las que se creen mas adelante.
