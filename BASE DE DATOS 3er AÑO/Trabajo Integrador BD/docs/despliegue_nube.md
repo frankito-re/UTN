@@ -22,7 +22,7 @@ Internet ──443/80──▶ [ proxy Caddy ]──▶ [ front nginx ]──/ap
 
 ## 2. Controles verificados localmente
 
-`scripts/verificar_despliegue.sh` ejecuta **27 controles** contra el stack de producción en marcha y falla si alguno no se cumple:
+`scripts/verificar_despliegue.sh` ejecuta **29 controles** contra el stack de producción en marcha y falla si alguno no se cumple:
 
 | Grupo | Controles |
 | :-- | :-- |
@@ -53,8 +53,8 @@ el mismo stack que se probó localmente.
    ```
 5. **Datos:** la base se crea sola con las migraciones `001…008`. Para cargar los datos de prueba o los de otro entorno
    usar la **restauración** (sección 4) o el cargador (`db/seed/cargar_datos.py`, conectándose por el socket del contenedor).
-6. **Verificar:** `scripts/verificar_despliegue.sh https://app.midominio.com` (los controles de red local se omiten solos
-   cuando el servidor no es la máquina actual: correrlo en el servidor).
+6. **Verificar:** correr `scripts/verificar_despliegue.sh https://app.midominio.com` **en el servidor** (los controles
+   miran los contenedores locales, así que no sirven desde otra máquina). Los de `HTTP_PORT`/`HTTPS_PORT` usan los valores de `.env.prod`.
 7. **Guardar `.env.prod` y `certs/ca/ca.key` en un gestor de secretos** (1Password, Bitwarden, AWS Secrets Manager). Sin
    ellos no se puede reconstruir el servidor.
 
