@@ -633,8 +633,8 @@ def main():
 
     con.autocommit = True
     t0 = time.perf_counter()
-    cur.execute("ANALYZE")
-    marca("ANALYZE", t0)
+    cur.execute("VACUUM (ANALYZE)")      # estadisticas + mapa de visibilidad (necesario para index-only scans)
+    marca("VACUUM (ANALYZE)", t0)
 
     t0 = time.perf_counter()
     for n_ronda, cond, factor in ((1, "TRUE", "1.08"), (2, "cod_vino % 2 = 0", "1.05"), (3, "cod_vino % 5 = 0", "1.10")):

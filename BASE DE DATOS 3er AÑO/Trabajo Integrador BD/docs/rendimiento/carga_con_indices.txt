@@ -1,0 +1,77 @@
+Generando datos en memoria (escala 1.0, semilla 42)...
+  Generacion en memoria                           3.86 s
+Cargando (una sola transaccion)...
+  Truncate y triggers de carga apagados           0.07 s
+  COPY localidad (39 filas)                       0.00 s
+  COPY sala_venta (40 filas)                      0.00 s
+  COPY empleado (400 filas)                       0.00 s
+  COPY finca (100 filas)                          0.00 s
+  COPY cepa (12 filas)                            0.00 s
+  COPY bodega (25 filas)                          0.00 s
+  COPY parcela (1,400 filas)                      0.02 s
+  COPY lote_uva (13,640 filas)                    0.22 s
+  COPY analisis_calidad (27,241 filas)            0.15 s
+  COPY vino (600 filas)                           0.01 s
+  COPY composicion (1,201 filas)                  0.01 s
+  COPY maridaje (8 filas)                         0.00 s
+  COPY vino_maridaje (1,177 filas)                0.02 s
+  COPY cliente (20,000 filas)                     0.28 s
+  COPY socio (18,000 filas)                       0.14 s
+  COPY distribuidor (1,000 filas)                 0.01 s
+  COPY exportador (1,000 filas)                   0.01 s
+  COPY permiso_exportacion (2,655 filas)          0.03 s
+  COPY transportista (15 filas)                   0.00 s
+  COPY cobertura_transportista (136 filas)        0.00 s
+  COPY comprobante (160,000 filas)                2.14 s
+  COPY renglon_comprobante (507,134 filas)        5.64 s
+  COPY ingreso (289 filas)                        0.01 s
+  COPY renglon_ingreso (1,411 filas)              0.02 s
+  COPY transferencia (5,490 filas)                0.03 s
+  COPY renglon_transferencia (35,127 filas)       0.35 s
+  COPY stock_sala (19,972 filas)                  0.30 s
+  COPY stock_deposito (600 filas)                 0.01 s
+  Triggers reactivados y secuencias ajustadas     0.01 s
+  COMMIT (validacion de triggers diferidos)       0.26 s
+  VACUUM (ANALYZE)                                0.61 s
+  Ajustes de precio (generan auditoria por trigger)    0.04 s
+  REFRESH de la vista materializada               0.50 s
+Verificando coherencia...
+  OK  Comprobantes cuyo total no coincide con     0.25 s
+  OK  Renglones cuyo subtotal no coincide con     0.19 s
+  OK  Comprobantes con distinto resultado que     0.01 s
+  OK  Stock de sala distinto de transferido -     0.10 s
+  OK  Stock de deposito distinto de ingresado     0.01 s
+  OK  Vinos cuyo corte no suma 100                0.00 s
+  OK  Clientes sin fila en su subtipo             0.02 s
+  OK  Triggers que quedaron desactivados          0.00 s
+
+Total: 15.5 s · base: 105 MB
+  localidad                         39
+  sala_venta                        40
+  empleado                         400
+  finca                            100
+  cepa                              12
+  bodega                            25
+  parcela                        1,400
+  lote_uva                      13,640
+  analisis_calidad              27,241
+  vino                             600
+  composicion                    1,201
+  maridaje                           8
+  vino_maridaje                  1,177
+  cliente                       20,000
+  socio                         18,000
+  distribuidor                   1,000
+  exportador                     1,000
+  permiso_exportacion            2,655
+  transportista                     15
+  cobertura_transportista          136
+  comprobante                  160,000
+  renglon_comprobante          507,134
+  ingreso                          289
+  renglon_ingreso                1,411
+  transferencia                  5,490
+  renglon_transferencia         35,127
+  stock_sala                    19,972
+  stock_deposito                   600
+  auditoria_precio               1,020

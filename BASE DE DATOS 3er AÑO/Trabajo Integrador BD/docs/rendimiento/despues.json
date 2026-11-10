@@ -1,0 +1,198 @@
+{
+ "etiqueta": "despues",
+ "consultas": {
+  "Q1": {
+   "ms": 2.0,
+   "plan_ms": 0.134,
+   "trigger_ms": 0,
+   "hit": 141,
+   "read": 0,
+   "scans": [
+    "Index Scan (sala_venta_pkey) en sala_venta",
+    "Index Only Scan (idx_comprobante_sala_fecha) en comprobante"
+   ],
+   "plan_texto": "Sort  (cost=312.07..312.17 rows=40 width=82) (actual time=1.893..1.895 rows=40 loops=1)\n  Sort Key: (sum(c.total)) DESC\n  Sort Method: quicksort  Memory: 27kB\n  Buffers: shared hit=141\n  ->  GroupAggregate  (cost=0.56..311.00 rows=40 width=82) (actual time=0.095..1.882 rows=40 loops=1)\n        Group Key: s.id_sala\n        Buffers: shared hit=141\n        ->  Nested Loop  (cost=0.56..275.04 rows=7013 width=24) (actual time=0.009..1.304 rows=6659 loops=1)\n              Buffers: shared hit=141\n              ->  Index Scan using sala_venta_pkey on sala_venta s  (cost=0.14..4.04 rows=40 width=18) (actual time=0.002..0.006 rows=40 loops=1)\n                    Buffers: shared hit=2\n              ->  Index Only Scan using idx_comprobante_sala_fecha on comprobante c  (cost=0.42..5.02 rows=175 width=10) (actual time=0.003..0.015 rows=166 loops=40)\n                    Index Cond: ((id_sala = s.id_sala) AND (fecha >= (CURRENT_DATE - 90)))\n                    Heap Fetches: 0\n                    Buffers: shared hit=139\nPlanning:\n  Buffers: shared hit=9\nPlanning Time: 0.084 ms\nExecution Time: 1.910 ms",
+   "titulo": "Ventas por sala del último trimestre (S8)"
+  },
+  "Q2": {
+   "ms": 0.021,
+   "plan_ms": 0.026,
+   "trigger_ms": 0,
+   "hit": 23,
+   "read": 0,
+   "scans": [
+    "Index Scan (idx_comprobante_cliente_fecha) en comprobante"
+   ],
+   "plan_texto": "Limit  (cost=0.42..23.23 rows=20 width=14) (actual time=0.004..0.012 rows=20 loops=1)\n  Buffers: shared hit=23\n  ->  Index Scan using idx_comprobante_cliente_fecha on comprobante  (cost=0.42..55.16 rows=48 width=14) (actual time=0.004..0.010 rows=20 loops=1)\n        Index Cond: (id_cliente = 13519)\n        Buffers: shared hit=23\nPlanning Time: 0.023 ms\nExecution Time: 0.017 ms",
+   "titulo": "Últimas 20 compras de un cliente (ficha de cliente)"
+  },
+  "Q3": {
+   "ms": 3.81,
+   "plan_ms": 0.109,
+   "trigger_ms": 0,
+   "hit": 7907,
+   "read": 0,
+   "scans": [
+    "Bitmap Heap Scan en renglon_comprobante",
+    "Bitmap Index Scan (idx_renglon_comprobante_vino) en ?",
+    "Index Scan (comprobante_pkey) en comprobante"
+   ],
+   "plan_texto": "GroupAggregate  (cost=3968.28..4010.96 rows=1707 width=12) (actual time=3.656..3.875 rows=83 loops=1)\n  Group Key: ((date_trunc('month'::text, (c.fecha)::timestamp with time zone))::date)\n  Buffers: shared hit=7907\n  ->  Sort  (cost=3968.28..3972.55 rows=1707 width=8) (actual time=3.652..3.740 rows=1638 loops=1)\n        Sort Key: ((date_trunc('month'::text, (c.fecha)::timestamp with time zone))::date)\n        Sort Method: quicksort  Memory: 100kB\n        Buffers: shared hit=7907\n        ->  Nested Loop  (cost=20.67..3876.64 rows=1707 width=8) (actual time=0.251..3.469 rows=1638 loops=1)\n              Buffers: shared hit=7907\n              ->  Bitmap Heap Scan on renglon_comprobante r  (cost=20.25..1485.72 rows=1707 width=8) (actual time=0.248..1.042 rows=1638 loops=1)\n                    Recheck Cond: (cod_vino = 50)\n                    Heap Blocks: exact=1348\n                    Buffers: shared hit=1355\n                    ->  Bitmap Index Scan on idx_renglon_comprobante_vino  (cost=0.00..19.82 rows=1707 width=0) (actual time=0.122..0.123 rows=1638 loops=1)\n                          Index Cond: (cod_vino = 50)\n                          Buffers: shared hit=7\n              ->  Index Scan using comprobante_pkey on comprobante c  (cost=0.42..1.39 rows=1 width=8) (actual time=0.001..0.001 rows=1 loops=1638)\n                    Index Cond: (nro_comprobante = r.nro_comprobante)\n                    Buffers: shared hit=6552\nPlanning:\n  Buffers: shared hit=16\nPlanning Time: 0.093 ms\nExecution Time: 3.895 ms",
+   "titulo": "Unidades vendidas de un vino por mes"
+  },
+  "Q4": {
+   "ms": 71.692,
+   "plan_ms": 0.18,
+   "trigger_ms": 0,
+   "hit": 3809,
+   "read": 0,
+   "scans": [
+    "Seq Scan en renglon_comprobante",
+    "Seq Scan en vino"
+   ],
+   "plan_texto": "Limit  (cost=8689.37..8689.39 rows=10 width=37) (actual time=65.768..66.802 rows=10 loops=1)\n  Buffers: shared hit=3809\n  ->  Sort  (cost=8689.37..8690.87 rows=600 width=37) (actual time=65.767..66.800 rows=10 loops=1)\n        Sort Key: (sum(r.cantidad)) DESC\n        Sort Method: top-N heapsort  Memory: 26kB\n        Buffers: shared hit=3809\n        ->  Finalize GroupAggregate  (cost=8524.39..8676.40 rows=600 width=37) (actual time=65.208..66.718 rows=600 loops=1)\n              Group Key: v.cod_vino\n              Buffers: shared hit=3809\n              ->  Gather Merge  (cost=8524.39..8664.40 rows=1200 width=37) (actual time=65.204..66.495 rows=1800 loops=1)\n                    Workers Planned: 2\n                    Workers Launched: 2\n                    Buffers: shared hit=3809\n                    ->  Sort  (cost=7524.37..7525.87 rows=600 width=37) (actual time=63.551..63.584 rows=600 loops=3)\n                          Sort Key: v.cod_vino\n                          Sort Method: quicksort  Memory: 63kB\n                          Buffers: shared hit=3809\n                          Worker 0:  Sort Method: quicksort  Memory: 63kB\n                          Worker 1:  Sort Method: quicksort  Memory: 63kB\n                          ->  Partial HashAggregate  (cost=7490.68..7496.68 rows=600 width=37) (actual time=63.374..63.434 rows=600 loops=3)\n                                Group Key: v.cod_vino\n                                Batches: 1  Memory Usage: 105kB\n                                Buffers: shared hit=3795\n                                Worker 0:  Batches: 1  Memory Usage: 105kB\n                                Worker 1:  Batches: 1  Memory Usage: 105kB\n                                ->  Hash Join  (cost=33.50..6434.15 rows=211306 width=33) (actual time=0.161..43.041 rows=169045 loops=3)\n                                      Hash Cond: (r.cod_vino = v.cod_vino)\n                                      Buffers: shared hit=3795\n                                      ->  Parallel Seq Scan on renglon_comprobante r  (cost=0.00..5842.06 rows=211306 width=8) (actual time=0.007..14.769 rows=169045 loops=3)\n                                            Buffers: shared hit=3729\n                                      ->  Hash  (cost=26.00..26.00 rows=600 width=29) (actual time=0.141..0.142 rows=600 loops=3)\n                                            Buckets: 1024  Batches: 1  Memory Usage: 45kB\n                                            Buffers: shared hit=60\n                                            ->  Seq Scan on vino v  (cost=0.00..26.00 rows=600 width=29) (actual time=0.009..0.068 rows=600 loops=3)\n                                                  Buffers: shared hit=60\nPlanning:\n  Buffers: shared hit=20\nPlanning Time: 0.176 ms\nExecution Time: 66.836 ms",
+   "titulo": "Top 10 vinos más vendidos de la red (S1)"
+  },
+  "Q5": {
+   "ms": 0.038,
+   "plan_ms": 0.084,
+   "trigger_ms": 0,
+   "hit": 37,
+   "read": 0,
+   "scans": [
+    "Index Scan (idx_comprobante_sala_fecha) en comprobante",
+    "Index Only Scan (cliente_id_cliente_tipo_cliente_key) en cliente"
+   ],
+   "plan_texto": "GroupAggregate  (cost=52.79..52.98 rows=3 width=14) (actual time=0.028..0.028 rows=1 loops=1)\n  Group Key: cl.tipo_cliente\n  Buffers: shared hit=37\n  ->  Sort  (cost=52.79..52.85 rows=21 width=10) (actual time=0.025..0.026 rows=14 loops=1)\n        Sort Key: cl.tipo_cliente, c.id_cliente\n        Sort Method: quicksort  Memory: 25kB\n        Buffers: shared hit=37\n        ->  Nested Loop  (cost=0.71..52.33 rows=21 width=10) (actual time=0.005..0.020 rows=14 loops=1)\n              Buffers: shared hit=37\n              ->  Index Scan using idx_comprobante_sala_fecha on comprobante c  (cost=0.42..25.03 rows=21 width=4) (actual time=0.003..0.005 rows=14 loops=1)\n                    Index Cond: ((id_sala = 7) AND (fecha >= (CURRENT_DATE - 7)))\n                    Buffers: shared hit=8\n              ->  Index Only Scan using cliente_id_cliente_tipo_cliente_key on cliente cl  (cost=0.29..1.30 rows=1 width=10) (actual time=0.001..0.001 rows=1 loops=14)\n                    Index Cond: (id_cliente = c.id_cliente)\n                    Heap Fetches: 0\n                    Buffers: shared hit=29\nPlanning:\n  Buffers: shared hit=15\nPlanning Time: 0.077 ms\nExecution Time: 0.036 ms",
+   "titulo": "Clientes por tipo que compraron en una sala en la última semana (S3)"
+  },
+  "Q6": {
+   "ms": 0.048,
+   "plan_ms": 0.027,
+   "trigger_ms": 0,
+   "hit": 2,
+   "read": 0,
+   "scans": [
+    "Index Only Scan (idx_transferencia_pendientes) en transferencia"
+   ],
+   "plan_texto": "Sort  (cost=6.97..7.06 rows=39 width=12) (actual time=0.034..0.036 rows=39 loops=1)\n  Sort Key: (count(*))\n  Sort Method: quicksort  Memory: 26kB\n  Buffers: shared hit=2\n  ->  GroupAggregate  (cost=0.14..5.93 rows=39 width=12) (actual time=0.004..0.030 rows=39 loops=1)\n        Group Key: id_sala\n        Buffers: shared hit=2\n        ->  Index Only Scan using idx_transferencia_pendientes on transferencia  (cost=0.14..4.74 rows=160 width=4) (actual time=0.003..0.014 rows=160 loops=1)\n              Heap Fetches: 0\n              Buffers: shared hit=2\nPlanning Time: 0.020 ms\nExecution Time: 0.043 ms",
+   "titulo": "Transferencias pendientes por sala (S5)"
+  },
+  "Q7": {
+   "ms": 1.143,
+   "plan_ms": 0.066,
+   "trigger_ms": 0,
+   "hit": 272,
+   "read": 0,
+   "scans": [
+    "Bitmap Heap Scan en cliente",
+    "Bitmap Index Scan (idx_cliente_nombre_lower) en ?"
+   ],
+   "plan_texto": "Limit  (cost=329.99..330.11 rows=50 width=21) (actual time=1.225..1.232 rows=50 loops=1)\n  Buffers: shared hit=272\n  ->  Sort  (cost=329.99..332.15 rows=865 width=21) (actual time=1.224..1.227 rows=50 loops=1)\n        Sort Key: nombre_razon_social\n        Sort Method: top-N heapsort  Memory: 30kB\n        Buffers: shared hit=272\n        ->  Bitmap Heap Scan on cliente  (cost=13.44..301.25 rows=865 width=21) (actual time=0.067..0.657 rows=989 loops=1)\n              Filter: (lower((nombre_razon_social)::text) ~~ 'gonz%'::text)\n              Heap Blocks: exact=267\n              Buffers: shared hit=272\n              ->  Bitmap Index Scan on idx_cliente_nombre_lower  (cost=0.00..13.23 rows=854 width=0) (actual time=0.046..0.047 rows=989 loops=1)\n                    Index Cond: ((lower((nombre_razon_social)::text) ~>=~ 'gonz'::text) AND (lower((nombre_razon_social)::text) ~<~ 'gon{'::text))\n                    Buffers: shared hit=5\nPlanning Time: 0.047 ms\nExecution Time: 1.240 ms",
+   "titulo": "Búsqueda de clientes por nombre (autocompletado)"
+  },
+  "Q8": {
+   "ms": 0.101,
+   "plan_ms": 0.111,
+   "trigger_ms": 0,
+   "hit": 201,
+   "read": 0,
+   "scans": [
+    "Index Only Scan (idx_renglon_transferencia_vino) en renglon_transferencia",
+    "Index Scan (transferencia_pkey) en transferencia"
+   ],
+   "plan_texto": "Limit  (cost=74.97..74.98 rows=3 width=12) (actual time=0.081..0.082 rows=3 loops=1)\n  Buffers: shared hit=201\n  ->  Sort  (cost=74.97..74.98 rows=3 width=12) (actual time=0.081..0.081 rows=3 loops=1)\n        Sort Key: (sum(rt.cantidad)) DESC\n        Sort Method: quicksort  Memory: 25kB\n        Buffers: shared hit=201\n        ->  GroupAggregate  (cost=74.89..74.95 rows=3 width=12) (actual time=0.078..0.079 rows=3 loops=1)\n              Group Key: t.id_sala\n              Buffers: shared hit=201\n              ->  Sort  (cost=74.89..74.90 rows=3 width=8) (actual time=0.077..0.077 rows=3 loops=1)\n                    Sort Key: t.id_sala\n                    Sort Method: quicksort  Memory: 25kB\n                    Buffers: shared hit=201\n                    ->  Nested Loop  (cost=0.57..74.87 rows=3 width=8) (actual time=0.073..0.076 rows=3 loops=1)\n                          Buffers: shared hit=201\n                          ->  Index Only Scan using idx_renglon_transferencia_vino on renglon_transferencia rt  (cost=0.29..2.56 rows=67 width=8) (actual time=0.003..0.008 rows=66 loops=1)\n                                Index Cond: (cod_vino = 50)\n                                Heap Fetches: 0\n                                Buffers: shared hit=3\n                          ->  Index Scan using transferencia_pkey on transferencia t  (cost=0.28..1.08 rows=1 width=8) (actual time=0.001..0.001 rows=0 loops=66)\n                                Index Cond: (nro_transferencia = rt.nro_transferencia)\n                                Filter: (fecha_confeccion >= (CURRENT_DATE - 15))\n                                Rows Removed by Filter: 1\n                                Buffers: shared hit=198\nPlanning:\n  Buffers: shared hit=12\nPlanning Time: 0.091 ms\nExecution Time: 0.091 ms",
+   "titulo": "Salas con más pedidos de un vino en los últimos 15 días (S4)"
+  },
+  "Q10": {
+   "ms": 1.471,
+   "plan_ms": 0.033,
+   "trigger_ms": 0,
+   "hit": 72,
+   "read": 0,
+   "scans": [
+    "Bitmap Heap Scan en comprobante",
+    "Bitmap Index Scan (brin_comprobante_fecha) en ?"
+   ],
+   "plan_texto": "Aggregate  (cost=1507.47..1507.48 rows=1 width=40) (actual time=1.406..1.407 rows=1 loops=1)\n  Buffers: shared hit=72\n  ->  Bitmap Heap Scan on comprobante  (cost=5.07..1472.41 rows=7013 width=6) (actual time=0.139..0.803 rows=6659 loops=1)\n        Recheck Cond: (fecha >= (CURRENT_DATE - 90))\n        Rows Removed by Index Recheck: 1661\n        Heap Blocks: lossy=70\n        Buffers: shared hit=72\n        ->  Bitmap Index Scan on brin_comprobante_fecha  (cost=0.00..3.32 rows=7619 width=0) (actual time=0.010..0.010 rows=700 loops=1)\n              Index Cond: (fecha >= (CURRENT_DATE - 90))\n              Buffers: shared hit=2\nPlanning:\n  Buffers: shared hit=1\nPlanning Time: 0.027 ms\nExecution Time: 1.414 ms",
+   "titulo": "Ventas de toda la red en el último trimestre (tablero)"
+  },
+  "Q9": {
+   "ms": 0.284,
+   "plan_ms": 0.02,
+   "trigger_ms": 0.265,
+   "hit": 5,
+   "read": 0,
+   "scans": [
+    "Index Scan (vino_pkey) en vino"
+   ],
+   "detalle_triggers": [
+    "RI_ConstraintTrigger_a_16506: 0.088 ms"
+   ],
+   "plan_texto": "Delete on vino  (cost=0.28..2.49 rows=0 width=0) (actual time=0.018..0.018 rows=0 loops=1)\n  Buffers: shared hit=5\n  ->  Index Scan using vino_pkey on vino  (cost=0.28..2.49 rows=1 width=6) (actual time=0.010..0.010 rows=1 loops=1)\n        Index Cond: (cod_vino = 609)\n        Buffers: shared hit=3\nPlanning Time: 0.041 ms\nTrigger for constraint composicion_cod_vino_fkey: time=0.014 calls=1\nTrigger for constraint vino_maridaje_cod_vino_fkey: time=0.007 calls=1\nTrigger for constraint renglon_comprobante_cod_vino_fkey: time=0.040 calls=1\nTrigger for constraint renglon_ingreso_cod_vino_fkey: time=0.011 calls=1\nTrigger for constraint renglon_transferencia_cod_vino_fkey: time=0.012 calls=1\nTrigger for constraint stock_sala_cod_vino_fkey: time=0.009 calls=1\nTrigger for constraint stock_deposito_cod_vino_fkey: time=0.009 calls=1\nTrigger for constraint auditoria_precio_cod_vino_fkey: time=0.006 calls=1\nExecution Time: 0.138 ms",
+   "titulo": "Borrar un vino sin movimientos (verificación de FK, RN-14)"
+  }
+ },
+ "escritura": {
+  "ms_por_venta": 0.9009715,
+  "ventas": 2000
+ },
+ "indices": {
+  "analisis_calidad_pkey": 630784,
+  "auditoria_precio_pkey": 40960,
+  "bodega_pkey": 16384,
+  "brin_comprobante_fecha": 24576,
+  "cepa_pkey": 16384,
+  "cliente_id_cliente_tipo_cliente_key": 655360,
+  "cliente_pkey": 466944,
+  "cobertura_transportista_pkey": 16384,
+  "composicion_pkey": 49152,
+  "comprobante_pkey": 4038656,
+  "distribuidor_pkey": 40960,
+  "empleado_pkey": 40960,
+  "exportador_pkey": 40960,
+  "finca_pkey": 16384,
+  "idx_auditoria_precio_vino": 57344,
+  "idx_cliente_nombre_lower": 638976,
+  "idx_comprobante_cliente_fecha": 4800512,
+  "idx_comprobante_sala_fecha": 7266304,
+  "idx_empleado_sala": 16384,
+  "idx_ingreso_bodega": 16384,
+  "idx_ingreso_transportista_fecha": 16384,
+  "idx_lote_uva_bodega": 147456,
+  "idx_renglon_comprobante_vino": 13262848,
+  "idx_renglon_ingreso_vino": 57344,
+  "idx_renglon_transferencia_vino": 1613824,
+  "idx_stock_sala_vino": 229376,
+  "idx_transferencia_pendientes": 16384,
+  "idx_vino_bodega": 16384,
+  "ingreso_pkey": 16384,
+  "localidad_pkey": 16384,
+  "lote_uva_pkey": 327680,
+  "maridaje_pkey": 16384,
+  "parcela_pkey": 49152,
+  "permiso_exportacion_pkey": 139264,
+  "renglon_comprobante_pkey": 12091392,
+  "renglon_ingreso_pkey": 49152,
+  "renglon_transferencia_pkey": 802816,
+  "sala_venta_pkey": 16384,
+  "socio_pkey": 425984,
+  "stock_deposito_pkey": 32768,
+  "stock_sala_pkey": 483328,
+  "transferencia_pkey": 139264,
+  "transportista_pkey": 16384,
+  "uq_cepa_nombre": 16384,
+  "uq_cliente_documento": 884736,
+  "uq_distribuidor_habilitacion": 49152,
+  "uq_localidad_nombre_prov": 16384,
+  "uq_lote_parcela_campania": 450560,
+  "uq_maridaje_nombre": 16384,
+  "uq_mv_ventas_mensuales_sala": 98304,
+  "uq_sala_direccion": 16384,
+  "uq_transportista_cuit": 16384,
+  "uq_vino_nombre_anada_volumen": 73728,
+  "vino_maridaje_pkey": 49152,
+  "vino_pkey": 49152
+ },
+ "tamano_bd": 118037527
+}

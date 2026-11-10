@@ -4,7 +4,7 @@ Generado el 2026-11-10 con `db/seed/cargar_datos.py` (escala **1.0**, semilla **
 
 Reproducir exactamente esta carga: `.venv/bin/python db/seed/cargar_datos.py --limpiar --escala 1.0 --semilla 42 --fecha-ref 2026-11-10` (requiere el contenedor levantado y `pip install -r db/seed/requirements.txt` en un entorno virtual).
 
-**Tiempo total:** 13.9 s · **Tamaño de la base:** 80 MB
+**Tiempo total:** 15.0 s · **Tamaño de la base:** 105 MB
 
 ## Conteos por tabla
 
@@ -46,48 +46,48 @@ Cumple el requisito del TP: al menos una tabla con más de 100.000 filas (`rengl
 
 | Fase | Segundos |
 | :-- | --: |
-| Generacion en memoria | 3.70 |
-| Truncate y triggers de carga apagados | 0.05 |
+| Generacion en memoria | 3.66 |
+| Truncate y triggers de carga apagados | 0.07 |
 | COPY localidad (39 filas) | 0.00 |
 | COPY sala_venta (40 filas) | 0.00 |
 | COPY empleado (400 filas) | 0.00 |
 | COPY finca (100 filas) | 0.00 |
 | COPY cepa (12 filas) | 0.00 |
 | COPY bodega (25 filas) | 0.00 |
-| COPY parcela (1,400 filas) | 0.02 |
-| COPY lote_uva (13,640 filas) | 0.23 |
-| COPY analisis_calidad (27,241 filas) | 0.17 |
+| COPY parcela (1,400 filas) | 0.01 |
+| COPY lote_uva (13,640 filas) | 0.21 |
+| COPY analisis_calidad (27,241 filas) | 0.15 |
 | COPY vino (600 filas) | 0.01 |
 | COPY composicion (1,201 filas) | 0.02 |
 | COPY maridaje (8 filas) | 0.00 |
 | COPY vino_maridaje (1,177 filas) | 0.02 |
-| COPY cliente (20,000 filas) | 0.22 |
-| COPY socio (18,000 filas) | 0.11 |
+| COPY cliente (20,000 filas) | 0.28 |
+| COPY socio (18,000 filas) | 0.15 |
 | COPY distribuidor (1,000 filas) | 0.01 |
 | COPY exportador (1,000 filas) | 0.01 |
-| COPY permiso_exportacion (2,655 filas) | 0.03 |
+| COPY permiso_exportacion (2,655 filas) | 0.02 |
 | COPY transportista (15 filas) | 0.00 |
 | COPY cobertura_transportista (136 filas) | 0.00 |
-| COPY comprobante (160,000 filas) | 1.60 |
-| COPY renglon_comprobante (507,134 filas) | 4.89 |
+| COPY comprobante (160,000 filas) | 2.09 |
+| COPY renglon_comprobante (507,134 filas) | 5.62 |
 | COPY ingreso (289 filas) | 0.01 |
 | COPY renglon_ingreso (1,411 filas) | 0.02 |
 | COPY transferencia (5,490 filas) | 0.03 |
-| COPY renglon_transferencia (35,127 filas) | 0.30 |
-| COPY stock_sala (19,972 filas) | 0.18 |
-| COPY stock_deposito (600 filas) | 0.00 |
+| COPY renglon_transferencia (35,127 filas) | 0.34 |
+| COPY stock_sala (19,972 filas) | 0.19 |
+| COPY stock_deposito (600 filas) | 0.01 |
 | Triggers reactivados y secuencias ajustadas | 0.01 |
-| COMMIT (validacion de triggers diferidos) | 0.46 |
-| ANALYZE | 0.45 |
-| Ajustes de precio (generan auditoria por trigger) | 0.03 |
-| REFRESH de la vista materializada | 0.48 |
-| OK  Comprobantes cuyo total no coincide con  | 0.25 |
+| COMMIT (validacion de triggers diferidos) | 0.25 |
+| VACUUM (ANALYZE) | 0.60 |
+| Ajustes de precio (generan auditoria por trigger) | 0.04 |
+| REFRESH de la vista materializada | 0.49 |
+| OK  Comprobantes cuyo total no coincide con  | 0.24 |
 | OK  Renglones cuyo subtotal no coincide con  | 0.19 |
-| OK  Comprobantes con distinto resultado que  | 0.02 |
+| OK  Comprobantes con distinto resultado que  | 0.01 |
 | OK  Stock de sala distinto de transferido -  | 0.09 |
 | OK  Stock de deposito distinto de ingresado  | 0.01 |
 | OK  Vinos cuyo corte no suma 100 | 0.00 |
-| OK  Clientes sin fila en su subtipo | 0.04 |
+| OK  Clientes sin fila en su subtipo | 0.02 |
 | OK  Triggers que quedaron desactivados | 0.00 |
 
 ## Verificaciones de coherencia
