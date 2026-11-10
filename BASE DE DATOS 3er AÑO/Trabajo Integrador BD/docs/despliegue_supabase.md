@@ -44,17 +44,15 @@ automática, carga los datos y **verifica**: 29 tablas, `anon`/`authenticated`/`
 y lee el catálogo. Al final escribe `.env.supabase.render` con la línea `DATABASE_URL=…` lista para pegar en Render. Ninguna clave se imprime.
 
 ### 3. Repositorio para Render
-Render despliega desde GitHub y necesita el `Dockerfile.cloud` y el `render.yaml` **en la raíz** del repositorio. Este proyecto vive dentro del repositorio general `UTN`,
-así que lo más simple es un **repositorio propio del TP** (además, el enunciado pide un repositorio Git del proyecto con commits de todos los integrantes). Se crea con el
-historial completo del proyecto (todos los commits) y se invita a los demás integrantes como colaboradores:
-```bash
-# desde una copia temporal (no toca tu repo): ver los comandos exactos en "Repositorio dedicado" más abajo
-gh repo create <usuario>/bodegas-del-atuel --private --source . --push
-```
+**No hace falta un repositorio nuevo.** Render despliega desde el repositorio que ya tenés (`frankito-re/UTN`) indicando la carpeta del proyecto como *Root Directory*.
+Solo hay que **subir la rama** `bd-tpi-bodegas-del-atuel` a GitHub (`git push -u origin bd-tpi-bodegas-del-atuel`) y conectar ese repositorio en Render (autorizar la app de Render en GitHub).
+*(El `render.yaml` solo lo lee Render si está en la raíz del repositorio; como acá el proyecto está en una subcarpeta, se usa la creación manual del servicio del paso 4.)*
+
+Riesgo a tener en cuenta: la ruta de la carpeta tiene espacios y una «Ñ». Si Render no la acepta, el plan B es un repositorio propio del TP (ver «Plan B» al final).
 
 ### 4. Crear el servicio en Render
-1. https://render.com → **New → Blueprint** (usa `render.yaml`) o **New → Web Service** → conectar el repositorio.
-2. Si es Web Service manual: *Language* **Docker**, *Dockerfile Path* `./Dockerfile.cloud`, *Instance type* **Free**, *Health Check Path* `/api/health`.
+1. https://render.com → **New → Web Service** → conectar el repositorio `UTN` y elegir la rama `bd-tpi-bodegas-del-atuel`.
+2. *Language* **Docker**, *Root Directory* `BASE DE DATOS 3er AÑO/Trabajo Integrador BD`, *Dockerfile Path* `./Dockerfile.cloud`, *Instance type* **Free**, *Health Check Path* `/api/health`.
 3. **Environment → `DATABASE_URL`**: pegar el valor de `.env.supabase.render` (es un secreto: Render lo guarda cifrado y no aparece en el repositorio).
 4. **Create**. Cuando termine el build, la URL queda tipo `https://bodegas-del-atuel.onrender.com`.
 
@@ -104,7 +102,7 @@ y guardar la salida: es la evidencia de «backup y restauración probados» para
 | `/api/health` da 503 recién desplegado | el contenedor despierta o `DATABASE_URL` está vacía en Render |
 | El instalador dice «el rol … todavía puede acceder a las tablas» | el endurecimiento no pudo quitar privilegios: reportar el mensaje; **no publicar** hasta resolverlo |
 
-## Repositorio dedicado (comandos exactos)
+## Plan B: repositorio propio del TP (solo si Render no acepta la ruta)
 
 `git subtree` falla con la «Ñ» del nombre de la carpeta, así que se usa `filter-branch` sobre una copia temporal (el repositorio original no se modifica):
 ```bash
