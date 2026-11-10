@@ -13,6 +13,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       TZ: America/Argentina/Mendoza
+      # Claves de los roles bodegas_api y bodegas_ro (las aplica 090_roles_passwords.sh)
+      API_DB_PASSWORD: ${API_DB_PASSWORD:-}
+      RO_DB_PASSWORD: ${RO_DB_PASSWORD:-}
     ports:
       - "${POSTGRES_PORT:-5435}:5432"
     volumes:

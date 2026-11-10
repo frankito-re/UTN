@@ -205,11 +205,13 @@ CREATE TRIGGER trg_renglon_calcula
     BEFORE INSERT OR UPDATE ON renglon_comprobante
     FOR EACH ROW EXECUTE FUNCTION fn_trg_renglon_calcula();
 
+-- (SECURITY DEFINER: el rol de la API no escribe stock_sala directamente; el
+-- bloqueo FOR UPDATE y el descuento los hace el trigger con privilegios del propietario.)
 -- RN-09 · No se vende mas de lo que hay en la sala. Se bloquea la fila de stock
 -- (FOR UPDATE) antes de leerla: dos ventas simultaneas del mismo vino en la misma
 -- sala se serializan y la segunda ve el stock ya descontado por la primera.
 CREATE OR REPLACE FUNCTION trg_validar_stock_venta() RETURNS trigger
-LANGUAGE plpgsql AS $$
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 DECLARE
     v_sala INTEGER;
 BEGIN
@@ -238,7 +240,7 @@ CREATE TRIGGER trg_renglon_valida_stock
 -- La venta descuenta el stock de la sala. Borrar un renglon NO lo devuelve: la
 -- baja de comprobantes viejos (consulta D1) no debe regenerar stock.
 CREATE OR REPLACE FUNCTION fn_trg_renglon_descuenta_stock() RETURNS trigger
-LANGUAGE plpgsql AS $$
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 BEGIN
     UPDATE stock_sala s
        SET cantidad = s.cantidad - NEW.cantidad

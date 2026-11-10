@@ -15,6 +15,11 @@
 -- procedimientos encienden. Así un UPDATE directo no puede saltear el impacto
 -- en el stock.
 --
+-- SECURITY DEFINER: corren con los privilegios del propietario. El rol de la API
+-- no tiene permiso de escritura directa sobre stock_deposito ni stock_sala
+-- (ver 007_roles.sql): el stock solo cambia a traves de estos procedimientos y
+-- de los triggers de venta. search_path fijo para evitar suplantacion de objetos.
+--
 -- Códigos de error propios (SQLSTATE, clase 'RN'): ver cabecera de 005.
 -- =============================================================================
 
@@ -22,7 +27,7 @@
 -- RN-10 · Procesar un ingreso: suma al stock del depósito central
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE sp_procesar_ingreso(p_cod_ingreso INTEGER)
-LANGUAGE plpgsql AS $$
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 DECLARE
     v_estado estado_documento;
     r        RECORD;
@@ -66,7 +71,7 @@ $$;
 -- Requiere stock suficiente en el depósito central para TODOS los renglones.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE PROCEDURE sp_procesar_transferencia(p_nro_transferencia INTEGER)
-LANGUAGE plpgsql AS $$
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_temp AS $$
 DECLARE
     v_estado     estado_documento;
     v_sala       INTEGER;
