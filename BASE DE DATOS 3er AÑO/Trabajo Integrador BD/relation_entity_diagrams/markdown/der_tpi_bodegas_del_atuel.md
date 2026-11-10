@@ -67,9 +67,10 @@ Para que el diagrama esté completo y cumpla con la evaluación, se exige inclui
 1. **Jerarquía de Cliente (Supertipo / Subtipos)**
    * **Cliente (Supertipo):** `id_cliente` (PK), `nombre_o_razón_social`, `tipo_doc`, `nro_doc`, `dirección`, `localidad`, `fecha_alta`, `descuento`.
    * **Subtipos (Especialización disjunta y total):**
-     * **Socio:** `zona`, `habilitación`.
-     * **Distribuidor:** datos comerciales propios.
-     * **Exportador:** `país_destino`.
+     * **Socio:** sin atributos propios (descuento base 10 %).
+     * **Distribuidor:** `zona_cobertura`, `nro_habilitación` (descuento base 20 %).
+     * **Exportador:** `país_destino` y sus permisos de exportación (descuento base 30 %).
+   * *Nota de diseño:* el supertipo guarda un discriminador `tipo_cliente`; cada subtipo referencia `(id_cliente, tipo_cliente)` con un `CHECK` fijo, lo que garantiza que un cliente pertenece a un solo subtipo (disjunta).
 2. **Permiso de exportación**
    * **Atributos:** `código_permiso` (PK), `fecha_emisión`, `fecha_vencimiento`.
    * **Relación:** **Permiso** `(1,1)` ─── `Otorgado a` ─── `(0,N)` **Exportador**.
