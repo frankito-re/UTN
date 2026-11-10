@@ -1,0 +1,16 @@
+# Proxy inverso con HTTPS automatico.
+#  - Con un dominio real (DOMINIO=app.midominio.com) obtiene y renueva solo el certificado de Let's Encrypt.
+#  - Con DOMINIO=localhost usa la CA interna de Caddy (para probar en la computadora).
+# HTTP (80) redirige a HTTPS.
+{
+	email {$ACME_EMAIL:admin@example.com}
+}
+
+{$DOMINIO:localhost} {
+	encode gzip zstd
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		-Server
+	}
+	reverse_proxy front:80
+}

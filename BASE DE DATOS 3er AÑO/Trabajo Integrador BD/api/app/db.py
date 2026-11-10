@@ -26,6 +26,10 @@ def conninfo() -> str:
         password=os.environ.get("DB_PASSWORD", ""),
         connect_timeout="5",
         application_name="bodegas-api",
+        # En produccion: DB_SSLMODE=verify-full + DB_SSLROOTCERT (la conexion a la base va cifrada
+        # y se verifica el certificado del servidor). make_conninfo descarta los valores None.
+        sslmode=os.environ.get("DB_SSLMODE") or None,
+        sslrootcert=os.environ.get("DB_SSLROOTCERT") or None,
     )
 
 

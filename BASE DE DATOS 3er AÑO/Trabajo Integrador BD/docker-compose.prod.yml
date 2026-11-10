@@ -1,0 +1,88 @@
+# Despliegue de produccion (una sola maquina con Docker). Uso:
+#   scripts/crear_env_prod.sh                 # genera .env.prod con claves aleatorias
+#   scripts/generar_certificados.sh           # CA propia + certificado TLS de la base
+#   docker compose --env-file .env.prod -f docker-compose.prod.yml up -d --build
+#
+# Diferencias con docker-compose.yml (desarrollo):
+#   * UNICO puerto publicado: 80/443 del proxy. Base, API y front no se publican.
+#   * Base con TLS obligatorio para conexiones de red; la API verifica el certificado (verify-full).
+#   * Las redes internas no tienen salida a internet; solo el proxy sale (certificados ACME).
+#   * Secretos solo en .env.prod (fuera del repositorio).
+name: bodegas_prod
+
+services:
+  db:
+    image: postgres:16
+    entrypoint: ["/bin/bash", "/deploy/db-entrypoint.sh"]
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      API_DB_PASSWORD: ${API_DB_PASSWORD}
+      RO_DB_PASSWORD: ${RO_DB_PASSWORD}
+      TZ: America/Argentina/Mendoza
+    volumes:
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+      - ./deploy:/deploy:ro
+      - ./certs/db:/certs-src:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [interna]
+    restart: unless-stopped
+
+  api:
+    build: ./api
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: bodegas_api
+      DB_PASSWORD: ${API_DB_PASSWORD}
+      DB_SSLMODE: verify-full
+      DB_SSLROOTCERT: /certs/ca.crt
+      CORS_ORIGINS: https://${DOMINIO:-localhost}
+    volumes:
+      - ./certs/ca/ca.crt:/certs/ca.crt:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    networks: [interna]
+    restart: unless-stopped
+
+  front:
+    build: ./front
+    depends_on: [api]
+    networks: [interna]
+    restart: unless-stopped
+
+  proxy:
+    image: caddy:2-alpine
+    environment:
+      DOMINIO: ${DOMINIO:-localhost}
+      ACME_EMAIL: ${ACME_EMAIL:-admin@example.com}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    depends_on: [front]
+    networks: [interna, publica]
+    restart: unless-stopped
+
+networks:
+  interna:
+    internal: true        # sin salida a internet
+  publica: {}
+
+volumes:
+  pgdata:
+  caddy_data:

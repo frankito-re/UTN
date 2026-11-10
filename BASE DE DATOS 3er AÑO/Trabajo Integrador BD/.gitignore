@@ -7,3 +7,6 @@ node_modules/
 !migrations/
 .venv/
 .pytest_cache/
+certs/
+backups/
+.env.prod
