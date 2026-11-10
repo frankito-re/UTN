@@ -47,5 +47,16 @@ services:
       - "${API_PORT:-8000}:8000"
     restart: unless-stopped
 
+  # Front (HTML/JS sin dependencias) servido por nginx; publica la API en /api (mismo origen).
+  # Aplicacion: http://localhost:8080
+  front:
+    build: ./front
+    container_name: bodegas_atuel_front
+    depends_on:
+      - api
+    ports:
+      - "${FRONT_PORT:-8080}:80"
+    restart: unless-stopped
+
 volumes:
   bodegas_atuel_pgdata:
