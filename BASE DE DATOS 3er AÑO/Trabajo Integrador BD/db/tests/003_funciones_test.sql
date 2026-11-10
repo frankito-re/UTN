@@ -57,6 +57,8 @@ BEGIN
         'comprobante sin renglones debe dar todo 0';
     ASSERT fn_total_comprobante(v_comp) = 0, 'total sin renglones debe ser 0';
 
+    -- Desde 005 la venta exige stock (RN-09): se carga antes de vender.
+    INSERT INTO stock_sala VALUES (v_sala, v_vino1, 100), (v_sala, v_vino2, 100);
     INSERT INTO renglon_comprobante VALUES (v_comp, v_vino1, 3, 1000, 30, fn_subtotal_renglon(3, 1000, 30));
     INSERT INTO renglon_comprobante VALUES (v_comp, v_vino2, 1, 2000, 30, fn_subtotal_renglon(1, 2000, 30));
 
@@ -74,10 +76,10 @@ BEGIN
      WHERE nro_comprobante = v_comp;
 
     -- RN-09: stock (sin fila = 0)
-    ASSERT fn_stock_sala(v_sala, v_vino1) = 0, 'sin fila de stock_sala debe dar 0';
-    INSERT INTO stock_sala VALUES (v_sala, v_vino1, 10);
-    ASSERT fn_stock_sala(v_sala, v_vino1) = 10, 'stock_sala debe reflejar la cantidad';
-    ASSERT fn_stock_sala(v_sala, v_vino2) = 0,  'otro vino sigue en 0';
+    ASSERT fn_stock_sala(v_sala, v_vino3) = 0, 'sin fila de stock_sala debe dar 0';
+    INSERT INTO stock_sala VALUES (v_sala, v_vino3, 10);
+    ASSERT fn_stock_sala(v_sala, v_vino3) = 10, 'stock_sala debe reflejar la cantidad';
+    ASSERT fn_stock_sala(v_sala, v_vino1) = 97, 'stock_sala refleja lo vendido (100 - 3)';
     ASSERT fn_stock_deposito(v_vino1) = 0, 'sin fila de stock_deposito debe dar 0';
     INSERT INTO stock_deposito VALUES (v_vino1, 250);
     ASSERT fn_stock_deposito(v_vino1) = 250, 'stock_deposito debe reflejar la cantidad';
