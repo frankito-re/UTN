@@ -6,3 +6,4 @@ node_modules/
 # El .gitignore de la raiz ignora migrations/; aca son parte del TP
 !migrations/
 .venv/
+.pytest_cache/

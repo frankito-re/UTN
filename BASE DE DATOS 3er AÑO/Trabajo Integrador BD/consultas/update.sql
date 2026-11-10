@@ -86,7 +86,7 @@ ROLLBACK;
 -- =============================================================================
 -- U3 · Incrementar un 13 % el precio de los vinos de una bodega determinada.
 -- La bodega se elige en la variable :cuit_bodega (aquí, la de menor CUIT).
--- El trigger de RN-13 registra cada cambio en auditoria_precio.
+-- El trigger de RN-13 registra cada cambio en auditoria_precio (con now() = instante de esta transaccion).
 -- =============================================================================
 \echo '=== U3 · +13 % de precio a los vinos de una bodega'
 SELECT cuit AS cuit_bodega FROM bodega ORDER BY cuit LIMIT 1 \gset
@@ -102,7 +102,7 @@ UPDATE vino
 SELECT round(avg(precio), 2) AS precio_promedio_despues FROM vino WHERE cuit_bodega = :'cuit_bodega';
 SELECT count(*) AS filas_de_auditoria_generadas
   FROM auditoria_precio a JOIN vino v USING (cod_vino)
- WHERE v.cuit_bodega = :'cuit_bodega' AND a.fecha_hora >= now() - INTERVAL '1 minute';
+ WHERE v.cuit_bodega = :'cuit_bodega' AND a.fecha_hora = now();
 ROLLBACK;
 
 
@@ -143,7 +143,7 @@ UPDATE vino
 
 SELECT a.cod_vino, a.precio_anterior, a.precio_nuevo
   FROM auditoria_precio a
- WHERE a.fecha_hora >= now() - INTERVAL '1 minute'
+ WHERE a.fecha_hora = now()
  ORDER BY a.cod_vino;
 ROLLBACK;
 

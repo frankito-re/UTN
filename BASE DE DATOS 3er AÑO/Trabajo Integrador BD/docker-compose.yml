@@ -28,5 +28,24 @@ services:
       retries: 10
     restart: unless-stopped
 
+  # API REST (FastAPI + psycopg, sin ORM). Se conecta como bodegas_api (privilegios minimos).
+  # Docs interactivas: http://localhost:8000/docs
+  api:
+    build: ./api
+    container_name: bodegas_atuel_api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: ${POSTGRES_DB}
+      DB_USER: bodegas_api
+      DB_PASSWORD: ${API_DB_PASSWORD}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    restart: unless-stopped
+
 volumes:
   bodegas_atuel_pgdata:

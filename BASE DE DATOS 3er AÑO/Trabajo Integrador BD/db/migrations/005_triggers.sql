@@ -216,8 +216,8 @@ DECLARE
     v_sala INTEGER;
 BEGIN
     SELECT id_sala INTO v_sala FROM comprobante WHERE nro_comprobante = NEW.nro_comprobante;
-    IF NOT FOUND THEN
-        RETURN NEW;   -- la FK informa el error
+    IF NOT FOUND OR NOT EXISTS (SELECT 1 FROM vino WHERE cod_vino = NEW.cod_vino) THEN
+        RETURN NEW;   -- comprobante o vino inexistente: la FK informa el error (no es un problema de stock)
     END IF;
 
     PERFORM 1 FROM stock_sala

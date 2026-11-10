@@ -1,0 +1,3913 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Bodegas del Atuel · API REST",
+    "description": "API sobre PostgreSQL con SQL parametrizado y driver nativo (sin ORM). Las reglas de negocio viven en la base; los errores se traducen asi: **400** peticion mal formada · **404** no existe · **409** conflicto de estado o de integridad (sin stock, transicion invalida, borrado con dependencias) · **422** regla de integridad violada (CHECK, corte distinto de 100, referencia inexistente) · **503** base no disponible.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/cepas": {
+      "get": {
+        "tags": [
+          "Catalogos"
+        ],
+        "summary": "Cepas",
+        "operationId": "cepas_cepas_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CepaOut"
+                  },
+                  "type": "array",
+                  "title": "Response Cepas Cepas Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bodegas": {
+      "get": {
+        "tags": [
+          "Catalogos"
+        ],
+        "summary": "Bodegas",
+        "operationId": "bodegas_bodegas_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BodegaOut"
+                  },
+                  "type": "array",
+                  "title": "Response Bodegas Bodegas Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/maridajes": {
+      "get": {
+        "tags": [
+          "Catalogos"
+        ],
+        "summary": "Maridajes",
+        "operationId": "maridajes_maridajes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/MaridajeOut"
+                  },
+                  "type": "array",
+                  "title": "Response Maridajes Maridajes Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transportistas": {
+      "get": {
+        "tags": [
+          "Catalogos"
+        ],
+        "summary": "Transportistas",
+        "operationId": "transportistas_transportistas_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TransportistaOut"
+                  },
+                  "type": "array",
+                  "title": "Response Transportistas Transportistas Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/localidades": {
+      "get": {
+        "tags": [
+          "Catalogos"
+        ],
+        "summary": "Localidades (para altas de clientes)",
+        "operationId": "localidades_localidades_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/salas": {
+      "get": {
+        "tags": [
+          "Catalogos"
+        ],
+        "summary": "Salas de venta",
+        "operationId": "salas_salas_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SalaOut"
+                  },
+                  "type": "array",
+                  "title": "Response Salas Salas Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/salas/{id_sala}/stock": {
+      "get": {
+        "tags": [
+          "Catalogos"
+        ],
+        "summary": "Stock de una sala",
+        "operationId": "stock_de_sala_salas__id_sala__stock_get",
+        "parameters": [
+          {
+            "name": "id_sala",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id Sala"
+            }
+          },
+          {
+            "name": "solo_con_stock",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "false: incluye los vinos agotados",
+              "default": true,
+              "title": "Solo Con Stock"
+            },
+            "description": "false: incluye los vinos agotados"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_StockSalaItem_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vinos": {
+      "get": {
+        "tags": [
+          "Vinos"
+        ],
+        "summary": "Catalogo de vinos (paginado, con filtros)",
+        "operationId": "listar_vinos_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Texto contenido en el nombre",
+              "title": "Q"
+            },
+            "description": "Texto contenido en el nombre"
+          },
+          {
+            "name": "tipo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/TipoVino"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tipo"
+            }
+          },
+          {
+            "name": "cuit_bodega",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^\\d{11}$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cuit Bodega"
+            }
+          },
+          {
+            "name": "precio_min",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Precio Min"
+            }
+          },
+          {
+            "name": "precio_max",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Precio Max"
+            }
+          },
+          {
+            "name": "con_stock",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "true: stock total > 0; false: sin stock",
+              "title": "Con Stock"
+            },
+            "description": "true: stock total > 0; false: sin stock"
+          },
+          {
+            "name": "orden",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Orden",
+              "default": "nombre"
+            }
+          },
+          {
+            "name": "sentido",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/Sentido",
+              "default": "asc"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_VinoOut_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Vinos"
+        ],
+        "summary": "Alta de un vino con su corte",
+        "operationId": "crear_vinos_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VinoIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VinoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vinos/{cod_vino}": {
+      "get": {
+        "tags": [
+          "Vinos"
+        ],
+        "summary": "Ficha de un vino",
+        "operationId": "obtener_vinos__cod_vino__get",
+        "parameters": [
+          {
+            "name": "cod_vino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Vino"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VinoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Vinos"
+        ],
+        "summary": "Edicion de un vino (el cambio de precio queda auditado)",
+        "operationId": "editar_vinos__cod_vino__put",
+        "parameters": [
+          {
+            "name": "cod_vino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Vino"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VinoUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VinoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Vinos"
+        ],
+        "summary": "Baja de un vino (409 si tiene movimientos, RN-14)",
+        "operationId": "borrar_vinos__cod_vino__delete",
+        "parameters": [
+          {
+            "name": "cod_vino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Vino"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vinos/{cod_vino}/precios": {
+      "get": {
+        "tags": [
+          "Vinos"
+        ],
+        "summary": "Historial de cambios de precio (RN-13)",
+        "operationId": "historial_precios_vinos__cod_vino__precios_get",
+        "parameters": [
+          {
+            "name": "cod_vino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Vino"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PrecioHistorico"
+                  },
+                  "title": "Response Historial Precios Vinos  Cod Vino  Precios Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientes": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Clientes (busqueda por prefijo del nombre)",
+        "operationId": "listar_clientes_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "maxLength": 80
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Prefijo del nombre o razon social (sin distinguir mayusculas)",
+              "title": "Q"
+            },
+            "description": "Prefijo del nombre o razon social (sin distinguir mayusculas)"
+          },
+          {
+            "name": "tipo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/TipoCliente"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tipo"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_ClienteOut_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Alta de un cliente; el descuento lo fija la base segun el tipo (RN-06)",
+        "operationId": "crear_clientes_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClienteIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clientes/{id_cliente}": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Ficha de un cliente con sus ultimas compras",
+        "operationId": "obtener_clientes__id_cliente__get",
+        "parameters": [
+          {
+            "name": "id_cliente",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id Cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClienteDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comprobantes": {
+      "get": {
+        "tags": [
+          "Ventas"
+        ],
+        "summary": "Comprobantes (paginado, con filtros)",
+        "operationId": "listar_comprobantes_get",
+        "parameters": [
+          {
+            "name": "id_sala",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Id Sala"
+            }
+          },
+          {
+            "name": "id_cliente",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Id Cliente"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Fecha minima (inclusive)",
+              "title": "Desde"
+            },
+            "description": "Fecha minima (inclusive)"
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Fecha maxima (inclusive)",
+              "title": "Hasta"
+            },
+            "description": "Fecha maxima (inclusive)"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_ComprobanteResumen_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ventas"
+        ],
+        "summary": "Nueva venta: la base calcula precios, descuento, totales y descuenta el stock",
+        "description": "Transaccion unica: si CUALQUIER renglon falla (sin stock -> 409 RN-09, vino inexistente -> 422)\nno se crea nada. La API solo informa cliente, sala, vinos y cantidades.",
+        "operationId": "crear_comprobantes_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComprobanteIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprobanteDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comprobantes/{nro_comprobante}": {
+      "get": {
+        "tags": [
+          "Ventas"
+        ],
+        "summary": "Un comprobante con sus renglones",
+        "operationId": "obtener_comprobantes__nro_comprobante__get",
+        "parameters": [
+          {
+            "name": "nro_comprobante",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Nro Comprobante"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComprobanteDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingresos": {
+      "get": {
+        "tags": [
+          "Ingresos al deposito"
+        ],
+        "summary": "Ingresos (paginado, con filtros)",
+        "operationId": "listar_ingresos_get",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/EstadoDocumento"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estado"
+            }
+          },
+          {
+            "name": "cod_transportista",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cod Transportista"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Desde"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hasta"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_IngresoResumen_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ingresos al deposito"
+        ],
+        "summary": "Nuevo ingreso (nace en confeccion, RN-10)",
+        "operationId": "crear_ingresos_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IngresoIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingresos/{cod_ingreso}": {
+      "get": {
+        "tags": [
+          "Ingresos al deposito"
+        ],
+        "summary": "Un ingreso con sus renglones",
+        "operationId": "obtener_ingresos__cod_ingreso__get",
+        "parameters": [
+          {
+            "name": "cod_ingreso",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Ingreso"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingresos/{cod_ingreso}/renglones": {
+      "post": {
+        "tags": [
+          "Ingresos al deposito"
+        ],
+        "summary": "Agregar un renglon (solo en confeccion, RN-12)",
+        "operationId": "agregar_renglon_ingresos__cod_ingreso__renglones_post",
+        "parameters": [
+          {
+            "name": "cod_ingreso",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Ingreso"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenglonIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingresos/{cod_ingreso}/renglones/{cod_vino}": {
+      "delete": {
+        "tags": [
+          "Ingresos al deposito"
+        ],
+        "summary": "Quitar un renglon (solo en confeccion, RN-12)",
+        "operationId": "quitar_renglon_ingresos__cod_ingreso__renglones__cod_vino__delete",
+        "parameters": [
+          {
+            "name": "cod_ingreso",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Ingreso"
+            }
+          },
+          {
+            "name": "cod_vino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Vino"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingresos/{cod_ingreso}/terminar": {
+      "post": {
+        "tags": [
+          "Ingresos al deposito"
+        ],
+        "summary": "en_confeccion -> terminado (no puede estar vacio)",
+        "operationId": "terminar_ingresos__cod_ingreso__terminar_post",
+        "parameters": [
+          {
+            "name": "cod_ingreso",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Ingreso"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingresos/{cod_ingreso}/procesar": {
+      "post": {
+        "tags": [
+          "Ingresos al deposito"
+        ],
+        "summary": "terminado -> procesado: suma al stock del deposito (CALL sp_procesar_ingreso)",
+        "operationId": "procesar_ingresos__cod_ingreso__procesar_post",
+        "parameters": [
+          {
+            "name": "cod_ingreso",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Ingreso"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngresoDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transferencias": {
+      "get": {
+        "tags": [
+          "Transferencias a salas"
+        ],
+        "summary": "Transferencias (paginado, con filtros)",
+        "operationId": "listar_transferencias_get",
+        "parameters": [
+          {
+            "name": "estado",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/EstadoDocumento"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Estado"
+            }
+          },
+          {
+            "name": "id_sala",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Id Sala"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Desde"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hasta"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_TransferenciaResumen_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Transferencias a salas"
+        ],
+        "summary": "Nueva transferencia (fecha = hoy, la fija la base; nace en confeccion, RN-11)",
+        "operationId": "crear_transferencias_post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferenciaIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferenciaDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transferencias/{nro_transferencia}": {
+      "get": {
+        "tags": [
+          "Transferencias a salas"
+        ],
+        "summary": "Una transferencia con sus renglones",
+        "operationId": "obtener_transferencias__nro_transferencia__get",
+        "parameters": [
+          {
+            "name": "nro_transferencia",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Nro Transferencia"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferenciaDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transferencias/{nro_transferencia}/renglones": {
+      "post": {
+        "tags": [
+          "Transferencias a salas"
+        ],
+        "summary": "Agregar un renglon (solo en confeccion, RN-12)",
+        "operationId": "agregar_renglon_transferencias__nro_transferencia__renglones_post",
+        "parameters": [
+          {
+            "name": "nro_transferencia",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Nro Transferencia"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenglonIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferenciaDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transferencias/{nro_transferencia}/renglones/{cod_vino}": {
+      "delete": {
+        "tags": [
+          "Transferencias a salas"
+        ],
+        "summary": "Quitar un renglon (solo en confeccion, RN-12)",
+        "operationId": "quitar_renglon_transferencias__nro_transferencia__renglones__cod_vino__delete",
+        "parameters": [
+          {
+            "name": "nro_transferencia",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Nro Transferencia"
+            }
+          },
+          {
+            "name": "cod_vino",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cod Vino"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transferencias/{nro_transferencia}/terminar": {
+      "post": {
+        "tags": [
+          "Transferencias a salas"
+        ],
+        "summary": "en_confeccion -> terminado (no puede estar vacia)",
+        "operationId": "terminar_transferencias__nro_transferencia__terminar_post",
+        "parameters": [
+          {
+            "name": "nro_transferencia",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Nro Transferencia"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferenciaDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transferencias/{nro_transferencia}/procesar": {
+      "post": {
+        "tags": [
+          "Transferencias a salas"
+        ],
+        "summary": "terminado -> procesado: mueve stock deposito -> sala (CALL sp_procesar_transferencia)",
+        "operationId": "procesar_transferencias__nro_transferencia__procesar_post",
+        "parameters": [
+          {
+            "name": "nro_transferencia",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Nro Transferencia"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransferenciaDetalle"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reportes/ventas-mensuales": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Ventas por mes y sala (vista materializada; se actualiza con POST /reportes/refrescar)",
+        "operationId": "ventas_mensuales_reportes_ventas_mensuales_get",
+        "parameters": [
+          {
+            "name": "id_sala",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Id Sala"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Primer mes (inclusive)",
+              "title": "Desde"
+            },
+            "description": "Primer mes (inclusive)"
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Ultimo mes (inclusive)",
+              "title": "Hasta"
+            },
+            "description": "Ultimo mes (inclusive)"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_VentaMensual_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reportes/refrescar": {
+      "post": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Refresca la vista materializada (CALL sp_refrescar_reportes)",
+        "operationId": "refrescar_reportes_refrescar_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reportes/top-vinos": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Vinos mas vendidos (por unidades)",
+        "operationId": "top_vinos_reportes_top_vinos_get",
+        "parameters": [
+          {
+            "name": "limite",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limite"
+            }
+          },
+          {
+            "name": "id_sala",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Id Sala"
+            }
+          },
+          {
+            "name": "desde",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Desde"
+            }
+          },
+          {
+            "name": "hasta",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Hasta"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopVino"
+                  },
+                  "title": "Response Top Vinos Reportes Top Vinos Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reportes/stock-critico": {
+      "get": {
+        "tags": [
+          "Reportes"
+        ],
+        "summary": "Vinos con stock total por debajo de un umbral",
+        "operationId": "stock_critico_reportes_stock_critico_get",
+        "parameters": [
+          {
+            "name": "umbral",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 50,
+              "title": "Umbral"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Numero de pagina, desde 1",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Numero de pagina, desde 1"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "description": "Filas por pagina (maximo 100)",
+              "default": 20,
+              "title": "Page Size"
+            },
+            "description": "Filas por pagina (maximo 100)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pagina_StockCritico_"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Salud"
+        ],
+        "summary": "Estado del servicio y de la conexion a la base",
+        "operationId": "salud_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BodegaOut": {
+        "properties": {
+          "cuit": {
+            "type": "string",
+            "title": "Cuit"
+          },
+          "razon_social": {
+            "type": "string",
+            "title": "Razon Social"
+          },
+          "domicilio": {
+            "type": "string",
+            "title": "Domicilio"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cuit",
+          "razon_social",
+          "domicilio"
+        ],
+        "title": "BodegaOut"
+      },
+      "CepaOut": {
+        "properties": {
+          "id_cepa": {
+            "type": "integer",
+            "title": "Id Cepa"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_cepa",
+          "nombre",
+          "tipo"
+        ],
+        "title": "CepaOut"
+      },
+      "ClienteDetalle": {
+        "properties": {
+          "id_cliente": {
+            "type": "integer",
+            "title": "Id Cliente"
+          },
+          "nombre_razon_social": {
+            "type": "string",
+            "title": "Nombre Razon Social"
+          },
+          "tipo_doc": {
+            "type": "string",
+            "title": "Tipo Doc"
+          },
+          "nro_doc": {
+            "type": "string",
+            "title": "Nro Doc"
+          },
+          "direccion": {
+            "type": "string",
+            "title": "Direccion"
+          },
+          "cod_postal": {
+            "type": "string",
+            "title": "Cod Postal"
+          },
+          "fecha_alta": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha Alta"
+          },
+          "tipo_cliente": {
+            "type": "string",
+            "title": "Tipo Cliente"
+          },
+          "descuento": {
+            "type": "number",
+            "title": "Descuento"
+          },
+          "zona_cobertura": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zona Cobertura"
+          },
+          "nro_habilitacion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nro Habilitacion"
+          },
+          "pais_destino": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pais Destino"
+          },
+          "ultimas_compras": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Ultimas Compras"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_cliente",
+          "nombre_razon_social",
+          "tipo_doc",
+          "nro_doc",
+          "direccion",
+          "cod_postal",
+          "fecha_alta",
+          "tipo_cliente",
+          "descuento",
+          "ultimas_compras"
+        ],
+        "title": "ClienteDetalle"
+      },
+      "ClienteIn": {
+        "properties": {
+          "nombre_razon_social": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Nombre Razon Social"
+          },
+          "tipo_doc": {
+            "type": "string",
+            "maxLength": 10,
+            "title": "Tipo Doc"
+          },
+          "nro_doc": {
+            "type": "string",
+            "maxLength": 20,
+            "minLength": 1,
+            "title": "Nro Doc"
+          },
+          "direccion": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 1,
+            "title": "Direccion"
+          },
+          "cod_postal": {
+            "type": "string",
+            "maxLength": 8,
+            "minLength": 1,
+            "title": "Cod Postal"
+          },
+          "tipo_cliente": {
+            "$ref": "#/components/schemas/TipoCliente"
+          },
+          "zona_cobertura": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Zona Cobertura"
+          },
+          "nro_habilitacion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nro Habilitacion"
+          },
+          "pais_destino": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pais Destino"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nombre_razon_social",
+          "tipo_doc",
+          "nro_doc",
+          "direccion",
+          "cod_postal",
+          "tipo_cliente"
+        ],
+        "title": "ClienteIn"
+      },
+      "ClienteOut": {
+        "properties": {
+          "id_cliente": {
+            "type": "integer",
+            "title": "Id Cliente"
+          },
+          "nombre_razon_social": {
+            "type": "string",
+            "title": "Nombre Razon Social"
+          },
+          "tipo_doc": {
+            "type": "string",
+            "title": "Tipo Doc"
+          },
+          "nro_doc": {
+            "type": "string",
+            "title": "Nro Doc"
+          },
+          "direccion": {
+            "type": "string",
+            "title": "Direccion"
+          },
+          "cod_postal": {
+            "type": "string",
+            "title": "Cod Postal"
+          },
+          "fecha_alta": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha Alta"
+          },
+          "tipo_cliente": {
+            "type": "string",
+            "title": "Tipo Cliente"
+          },
+          "descuento": {
+            "type": "number",
+            "title": "Descuento"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_cliente",
+          "nombre_razon_social",
+          "tipo_doc",
+          "nro_doc",
+          "direccion",
+          "cod_postal",
+          "fecha_alta",
+          "tipo_cliente",
+          "descuento"
+        ],
+        "title": "ClienteOut"
+      },
+      "ComprobanteDetalle": {
+        "properties": {
+          "nro_comprobante": {
+            "type": "integer",
+            "title": "Nro Comprobante"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "id_cliente": {
+            "type": "integer",
+            "title": "Id Cliente"
+          },
+          "cliente": {
+            "type": "string",
+            "title": "Cliente"
+          },
+          "tipo_cliente": {
+            "type": "string",
+            "title": "Tipo Cliente"
+          },
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "sala": {
+            "type": "string",
+            "title": "Sala"
+          },
+          "localidad_sala": {
+            "type": "string",
+            "title": "Localidad Sala"
+          },
+          "subtotal": {
+            "type": "number",
+            "title": "Subtotal"
+          },
+          "descuento": {
+            "type": "number",
+            "title": "Descuento"
+          },
+          "total": {
+            "type": "number",
+            "title": "Total"
+          },
+          "renglones": {
+            "type": "integer",
+            "title": "Renglones"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          },
+          "detalle": {
+            "items": {
+              "$ref": "#/components/schemas/RenglonComprobanteOut"
+            },
+            "type": "array",
+            "title": "Detalle"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nro_comprobante",
+          "fecha",
+          "id_cliente",
+          "cliente",
+          "tipo_cliente",
+          "id_sala",
+          "sala",
+          "localidad_sala",
+          "subtotal",
+          "descuento",
+          "total",
+          "renglones",
+          "unidades",
+          "detalle"
+        ],
+        "title": "ComprobanteDetalle"
+      },
+      "ComprobanteIn": {
+        "properties": {
+          "id_cliente": {
+            "type": "integer",
+            "title": "Id Cliente"
+          },
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "renglones": {
+            "items": {
+              "$ref": "#/components/schemas/RenglonIn"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Renglones"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id_cliente",
+          "id_sala",
+          "renglones"
+        ],
+        "title": "ComprobanteIn"
+      },
+      "ComprobanteResumen": {
+        "properties": {
+          "nro_comprobante": {
+            "type": "integer",
+            "title": "Nro Comprobante"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "id_cliente": {
+            "type": "integer",
+            "title": "Id Cliente"
+          },
+          "cliente": {
+            "type": "string",
+            "title": "Cliente"
+          },
+          "tipo_cliente": {
+            "type": "string",
+            "title": "Tipo Cliente"
+          },
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "sala": {
+            "type": "string",
+            "title": "Sala"
+          },
+          "localidad_sala": {
+            "type": "string",
+            "title": "Localidad Sala"
+          },
+          "subtotal": {
+            "type": "number",
+            "title": "Subtotal"
+          },
+          "descuento": {
+            "type": "number",
+            "title": "Descuento"
+          },
+          "total": {
+            "type": "number",
+            "title": "Total"
+          },
+          "renglones": {
+            "type": "integer",
+            "title": "Renglones"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nro_comprobante",
+          "fecha",
+          "id_cliente",
+          "cliente",
+          "tipo_cliente",
+          "id_sala",
+          "sala",
+          "localidad_sala",
+          "subtotal",
+          "descuento",
+          "total",
+          "renglones",
+          "unidades"
+        ],
+        "title": "ComprobanteResumen"
+      },
+      "CorteItem": {
+        "properties": {
+          "id_cepa": {
+            "type": "integer",
+            "title": "Id Cepa"
+          },
+          "porcentaje": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Porcentaje"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id_cepa",
+          "porcentaje"
+        ],
+        "title": "CorteItem"
+      },
+      "CorteOut": {
+        "properties": {
+          "id_cepa": {
+            "type": "integer",
+            "title": "Id Cepa"
+          },
+          "cepa": {
+            "type": "string",
+            "title": "Cepa"
+          },
+          "porcentaje": {
+            "type": "number",
+            "title": "Porcentaje"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_cepa",
+          "cepa",
+          "porcentaje"
+        ],
+        "title": "CorteOut"
+      },
+      "EstadoDocumento": {
+        "type": "string",
+        "enum": [
+          "en_confeccion",
+          "terminado",
+          "procesado"
+        ],
+        "title": "EstadoDocumento"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "IngresoDetalle": {
+        "properties": {
+          "cod_ingreso": {
+            "type": "integer",
+            "title": "Cod Ingreso"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoDocumento"
+          },
+          "cod_transportista": {
+            "type": "integer",
+            "title": "Cod Transportista"
+          },
+          "transportista": {
+            "type": "string",
+            "title": "Transportista"
+          },
+          "cuit_bodega": {
+            "type": "string",
+            "title": "Cuit Bodega"
+          },
+          "bodega": {
+            "type": "string",
+            "title": "Bodega"
+          },
+          "renglones": {
+            "type": "integer",
+            "title": "Renglones"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          },
+          "detalle": {
+            "items": {
+              "$ref": "#/components/schemas/RenglonDocumentoOut"
+            },
+            "type": "array",
+            "title": "Detalle"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_ingreso",
+          "fecha",
+          "estado",
+          "cod_transportista",
+          "transportista",
+          "cuit_bodega",
+          "bodega",
+          "renglones",
+          "unidades",
+          "detalle"
+        ],
+        "title": "IngresoDetalle"
+      },
+      "IngresoIn": {
+        "properties": {
+          "cod_transportista": {
+            "type": "integer",
+            "title": "Cod Transportista"
+          },
+          "cuit_bodega": {
+            "type": "string",
+            "pattern": "^\\d{11}$",
+            "title": "Cuit Bodega"
+          },
+          "renglones": {
+            "items": {
+              "$ref": "#/components/schemas/RenglonIn"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Renglones"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cod_transportista",
+          "cuit_bodega",
+          "renglones"
+        ],
+        "title": "IngresoIn"
+      },
+      "IngresoResumen": {
+        "properties": {
+          "cod_ingreso": {
+            "type": "integer",
+            "title": "Cod Ingreso"
+          },
+          "fecha": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoDocumento"
+          },
+          "cod_transportista": {
+            "type": "integer",
+            "title": "Cod Transportista"
+          },
+          "transportista": {
+            "type": "string",
+            "title": "Transportista"
+          },
+          "cuit_bodega": {
+            "type": "string",
+            "title": "Cuit Bodega"
+          },
+          "bodega": {
+            "type": "string",
+            "title": "Bodega"
+          },
+          "renglones": {
+            "type": "integer",
+            "title": "Renglones"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_ingreso",
+          "fecha",
+          "estado",
+          "cod_transportista",
+          "transportista",
+          "cuit_bodega",
+          "bodega",
+          "renglones",
+          "unidades"
+        ],
+        "title": "IngresoResumen"
+      },
+      "MaridajeOut": {
+        "properties": {
+          "id_maridaje": {
+            "type": "integer",
+            "title": "Id Maridaje"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "temperatura_servicio": {
+            "type": "number",
+            "title": "Temperatura Servicio"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_maridaje",
+          "nombre",
+          "temperatura_servicio"
+        ],
+        "title": "MaridajeOut"
+      },
+      "Orden": {
+        "type": "string",
+        "enum": [
+          "nombre",
+          "precio",
+          "anada",
+          "stock"
+        ],
+        "title": "Orden"
+      },
+      "Pagina_ClienteOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ClienteOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[ClienteOut]"
+      },
+      "Pagina_ComprobanteResumen_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ComprobanteResumen"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[ComprobanteResumen]"
+      },
+      "Pagina_IngresoResumen_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/IngresoResumen"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[IngresoResumen]"
+      },
+      "Pagina_StockCritico_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/StockCritico"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[StockCritico]"
+      },
+      "Pagina_StockSalaItem_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/StockSalaItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[StockSalaItem]"
+      },
+      "Pagina_TransferenciaResumen_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TransferenciaResumen"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[TransferenciaResumen]"
+      },
+      "Pagina_VentaMensual_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/VentaMensual"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[VentaMensual]"
+      },
+      "Pagina_VinoOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/VinoOut"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "page_size": {
+            "type": "integer",
+            "title": "Page Size"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          },
+          "pages": {
+            "type": "integer",
+            "title": "Pages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Pagina[VinoOut]"
+      },
+      "PrecioHistorico": {
+        "properties": {
+          "id_auditoria": {
+            "type": "integer",
+            "title": "Id Auditoria"
+          },
+          "precio_anterior": {
+            "type": "number",
+            "title": "Precio Anterior"
+          },
+          "precio_nuevo": {
+            "type": "number",
+            "title": "Precio Nuevo"
+          },
+          "fecha_hora": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Fecha Hora"
+          },
+          "usuario": {
+            "type": "string",
+            "title": "Usuario"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_auditoria",
+          "precio_anterior",
+          "precio_nuevo",
+          "fecha_hora",
+          "usuario"
+        ],
+        "title": "PrecioHistorico"
+      },
+      "RenglonComprobanteOut": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "vino": {
+            "type": "string",
+            "title": "Vino"
+          },
+          "cantidad": {
+            "type": "integer",
+            "title": "Cantidad"
+          },
+          "precio_unitario": {
+            "type": "number",
+            "title": "Precio Unitario"
+          },
+          "descuento_pct": {
+            "type": "number",
+            "title": "Descuento Pct"
+          },
+          "subtotal": {
+            "type": "number",
+            "title": "Subtotal"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "vino",
+          "cantidad",
+          "precio_unitario",
+          "descuento_pct",
+          "subtotal"
+        ],
+        "title": "RenglonComprobanteOut"
+      },
+      "RenglonDocumentoOut": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "vino": {
+            "type": "string",
+            "title": "Vino"
+          },
+          "cantidad": {
+            "type": "integer",
+            "title": "Cantidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "vino",
+          "cantidad"
+        ],
+        "title": "RenglonDocumentoOut"
+      },
+      "RenglonIn": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "cantidad": {
+            "type": "integer",
+            "title": "Cantidad"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "cantidad"
+        ],
+        "title": "RenglonIn"
+      },
+      "SalaOut": {
+        "properties": {
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "direccion": {
+            "type": "string",
+            "title": "Direccion"
+          },
+          "dia_cierre": {
+            "type": "string",
+            "title": "Dia Cierre"
+          },
+          "localidad": {
+            "type": "string",
+            "title": "Localidad"
+          },
+          "provincia": {
+            "type": "string",
+            "title": "Provincia"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_sala",
+          "direccion",
+          "dia_cierre",
+          "localidad",
+          "provincia"
+        ],
+        "title": "SalaOut"
+      },
+      "Sentido": {
+        "type": "string",
+        "enum": [
+          "asc",
+          "desc"
+        ],
+        "title": "Sentido"
+      },
+      "StockCritico": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "stock_deposito": {
+            "type": "integer",
+            "title": "Stock Deposito"
+          },
+          "stock_salas": {
+            "type": "integer",
+            "title": "Stock Salas"
+          },
+          "stock_total": {
+            "type": "integer",
+            "title": "Stock Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "nombre",
+          "stock_deposito",
+          "stock_salas",
+          "stock_total"
+        ],
+        "title": "StockCritico"
+      },
+      "StockSalaItem": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "cantidad": {
+            "type": "integer",
+            "title": "Cantidad"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "nombre",
+          "cantidad"
+        ],
+        "title": "StockSalaItem"
+      },
+      "TipoCliente": {
+        "type": "string",
+        "enum": [
+          "socio",
+          "distribuidor",
+          "exportador"
+        ],
+        "title": "TipoCliente"
+      },
+      "TipoVino": {
+        "type": "string",
+        "enum": [
+          "tinto",
+          "blanco",
+          "rosado",
+          "espumante"
+        ],
+        "title": "TipoVino"
+      },
+      "TopVino": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          },
+          "importe": {
+            "type": "number",
+            "title": "Importe"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "nombre",
+          "unidades",
+          "importe"
+        ],
+        "title": "TopVino"
+      },
+      "TransferenciaDetalle": {
+        "properties": {
+          "nro_transferencia": {
+            "type": "integer",
+            "title": "Nro Transferencia"
+          },
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "sala": {
+            "type": "string",
+            "title": "Sala"
+          },
+          "fecha_confeccion": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha Confeccion"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoDocumento"
+          },
+          "renglones": {
+            "type": "integer",
+            "title": "Renglones"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          },
+          "detalle": {
+            "items": {
+              "$ref": "#/components/schemas/RenglonDocumentoOut"
+            },
+            "type": "array",
+            "title": "Detalle"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nro_transferencia",
+          "id_sala",
+          "sala",
+          "fecha_confeccion",
+          "estado",
+          "renglones",
+          "unidades",
+          "detalle"
+        ],
+        "title": "TransferenciaDetalle"
+      },
+      "TransferenciaIn": {
+        "properties": {
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "renglones": {
+            "items": {
+              "$ref": "#/components/schemas/RenglonIn"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Renglones"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id_sala",
+          "renglones"
+        ],
+        "title": "TransferenciaIn"
+      },
+      "TransferenciaResumen": {
+        "properties": {
+          "nro_transferencia": {
+            "type": "integer",
+            "title": "Nro Transferencia"
+          },
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "sala": {
+            "type": "string",
+            "title": "Sala"
+          },
+          "fecha_confeccion": {
+            "type": "string",
+            "format": "date",
+            "title": "Fecha Confeccion"
+          },
+          "estado": {
+            "$ref": "#/components/schemas/EstadoDocumento"
+          },
+          "renglones": {
+            "type": "integer",
+            "title": "Renglones"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          }
+        },
+        "type": "object",
+        "required": [
+          "nro_transferencia",
+          "id_sala",
+          "sala",
+          "fecha_confeccion",
+          "estado",
+          "renglones",
+          "unidades"
+        ],
+        "title": "TransferenciaResumen"
+      },
+      "TransportistaOut": {
+        "properties": {
+          "cod_transportista": {
+            "type": "integer",
+            "title": "Cod Transportista"
+          },
+          "razon_social": {
+            "type": "string",
+            "title": "Razon Social"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_transportista",
+          "razon_social"
+        ],
+        "title": "TransportistaOut"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VentaMensual": {
+        "properties": {
+          "mes": {
+            "type": "string",
+            "format": "date",
+            "title": "Mes"
+          },
+          "id_sala": {
+            "type": "integer",
+            "title": "Id Sala"
+          },
+          "comprobantes": {
+            "type": "integer",
+            "title": "Comprobantes"
+          },
+          "unidades": {
+            "type": "integer",
+            "title": "Unidades"
+          },
+          "total_vendido": {
+            "type": "number",
+            "title": "Total Vendido"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mes",
+          "id_sala",
+          "comprobantes",
+          "unidades",
+          "total_vendido"
+        ],
+        "title": "VentaMensual"
+      },
+      "VinoDetalle": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          },
+          "anada": {
+            "type": "integer",
+            "title": "Anada"
+          },
+          "volumen_ml": {
+            "type": "integer",
+            "title": "Volumen Ml"
+          },
+          "graduacion": {
+            "type": "number",
+            "title": "Graduacion"
+          },
+          "precio": {
+            "type": "number",
+            "title": "Precio"
+          },
+          "bodega": {
+            "type": "string",
+            "title": "Bodega"
+          },
+          "corte": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corte"
+          },
+          "stock_deposito": {
+            "type": "integer",
+            "title": "Stock Deposito"
+          },
+          "stock_salas": {
+            "type": "integer",
+            "title": "Stock Salas"
+          },
+          "stock_total": {
+            "type": "integer",
+            "title": "Stock Total"
+          },
+          "cuit_bodega": {
+            "type": "string",
+            "title": "Cuit Bodega"
+          },
+          "detalle_corte": {
+            "items": {
+              "$ref": "#/components/schemas/CorteOut"
+            },
+            "type": "array",
+            "title": "Detalle Corte"
+          },
+          "maridajes": {
+            "items": {
+              "$ref": "#/components/schemas/MaridajeOut"
+            },
+            "type": "array",
+            "title": "Maridajes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "nombre",
+          "tipo",
+          "anada",
+          "volumen_ml",
+          "graduacion",
+          "precio",
+          "bodega",
+          "corte",
+          "stock_deposito",
+          "stock_salas",
+          "stock_total",
+          "cuit_bodega",
+          "detalle_corte",
+          "maridajes"
+        ],
+        "title": "VinoDetalle"
+      },
+      "VinoIn": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Nombre"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoVino"
+          },
+          "anada": {
+            "type": "integer",
+            "title": "Anada"
+          },
+          "volumen_ml": {
+            "type": "integer",
+            "title": "Volumen Ml"
+          },
+          "graduacion": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Graduacion"
+          },
+          "precio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Precio"
+          },
+          "cuit_bodega": {
+            "type": "string",
+            "pattern": "^\\d{11}$",
+            "title": "Cuit Bodega"
+          },
+          "corte": {
+            "items": {
+              "$ref": "#/components/schemas/CorteItem"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Corte",
+            "description": "Cepas y porcentajes; la base exige que sumen 100 (RN-05)."
+          },
+          "maridajes": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Maridajes",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nombre",
+          "tipo",
+          "anada",
+          "volumen_ml",
+          "graduacion",
+          "precio",
+          "cuit_bodega",
+          "corte"
+        ],
+        "title": "VinoIn"
+      },
+      "VinoOut": {
+        "properties": {
+          "cod_vino": {
+            "type": "integer",
+            "title": "Cod Vino"
+          },
+          "nombre": {
+            "type": "string",
+            "title": "Nombre"
+          },
+          "tipo": {
+            "type": "string",
+            "title": "Tipo"
+          },
+          "anada": {
+            "type": "integer",
+            "title": "Anada"
+          },
+          "volumen_ml": {
+            "type": "integer",
+            "title": "Volumen Ml"
+          },
+          "graduacion": {
+            "type": "number",
+            "title": "Graduacion"
+          },
+          "precio": {
+            "type": "number",
+            "title": "Precio"
+          },
+          "bodega": {
+            "type": "string",
+            "title": "Bodega"
+          },
+          "corte": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corte"
+          },
+          "stock_deposito": {
+            "type": "integer",
+            "title": "Stock Deposito"
+          },
+          "stock_salas": {
+            "type": "integer",
+            "title": "Stock Salas"
+          },
+          "stock_total": {
+            "type": "integer",
+            "title": "Stock Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cod_vino",
+          "nombre",
+          "tipo",
+          "anada",
+          "volumen_ml",
+          "graduacion",
+          "precio",
+          "bodega",
+          "corte",
+          "stock_deposito",
+          "stock_salas",
+          "stock_total"
+        ],
+        "title": "VinoOut"
+      },
+      "VinoUpdate": {
+        "properties": {
+          "nombre": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Nombre"
+          },
+          "tipo": {
+            "$ref": "#/components/schemas/TipoVino"
+          },
+          "anada": {
+            "type": "integer",
+            "title": "Anada"
+          },
+          "volumen_ml": {
+            "type": "integer",
+            "title": "Volumen Ml"
+          },
+          "graduacion": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Graduacion"
+          },
+          "precio": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Precio"
+          },
+          "cuit_bodega": {
+            "type": "string",
+            "pattern": "^\\d{11}$",
+            "title": "Cuit Bodega"
+          },
+          "corte": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/CorteItem"
+                },
+                "type": "array",
+                "minItems": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corte"
+          },
+          "maridajes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Maridajes"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "nombre",
+          "tipo",
+          "anada",
+          "volumen_ml",
+          "graduacion",
+          "precio",
+          "cuit_bodega"
+        ],
+        "title": "VinoUpdate",
+        "description": "Edicion completa del vino. `corte` y `maridajes` son opcionales: si se omiten no se tocan."
+      }
+    }
+  }
+}

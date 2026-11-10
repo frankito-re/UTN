@@ -160,6 +160,9 @@ BEGIN
     PERFORM pg_temp.expect_error(format(
         'INSERT INTO renglon_comprobante (nro_comprobante, cod_vino, cantidad) VALUES (%s, %s, 1)', c1, vB),
         'RN009', 'RN-09: vender un vino sin stock');
+    PERFORM pg_temp.expect_error(format(
+        'INSERT INTO renglon_comprobante (nro_comprobante, cod_vino, cantidad) VALUES (%s, -1, 1)', c1),
+        '23502', 'un vino inexistente es error de integridad (sin precio), no de stock insuficiente RN009');
 
     INSERT INTO comprobante (id_cliente, id_sala) VALUES (v_expo, v_sala1) RETURNING nro_comprobante INTO c2;
     PERFORM pg_temp.expect_error(format(
